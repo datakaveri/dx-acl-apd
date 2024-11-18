@@ -26,7 +26,7 @@ services:
       - LOG_LEVEL=INFO
     volumes:
       - /home/ubuntu/configs/apd-config-dev.json:/usr/share/app/secrets/configs/config.json
-    command: bash -c "exec java $$FS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
+    command: bash -c "exec java $$FS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json --modules all --isClustered true"
     ports:
       - "8080:8080"
     networks:
