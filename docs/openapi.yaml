@@ -76,12 +76,12 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          description: AAA issued identity token
+          description: DX Auth issued identity token
           required: true
           schema:
             type: string
             minLength: 1
-            pattern: '^[a-zA-Z0-9_*\-*\.\/]+$'
+            pattern: 'Bearer [a-zA-Z0-9_*\-*\.\/]+$|^[a-zA-Z0-9_*\-*\.\/]+$'
       responses:
         '200':
           description: |-
@@ -139,12 +139,12 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          description: AAA issued identity token
+          description: DX Auth issued identity token
           required: true
           schema:
             type: string
             minLength: 1
-            pattern: '^[a-zA-Z0-9_*\-*\.\/]+$'
+            pattern: 'Bearer [a-zA-Z0-9_*\-*\.\/]+$|^[a-zA-Z0-9_*\-*\.\/]+$'
       requestBody:
         description: Request body is a JsonObject containing ID whose value is the policy ID.
         required: true
@@ -255,12 +255,12 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          description: AAA issued identity token
+          description: DX Auth issued identity token
           required: true
           schema:
             type: string
             minLength: 1
-            pattern: '^[a-zA-Z0-9_*\-*\.\/]+$'
+            pattern: 'Bearer [a-zA-Z0-9_*\-*\.\/]+$|^[a-zA-Z0-9_*\-*\.\/]+$'
       requestBody:
         description: >
           **Request Body Details:**
@@ -529,12 +529,12 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          description: AAA issued Identity token
+          description: DX Auth issued Identity token
           required: true
           schema:
             type: string
             minLength: 1
-            pattern: '^[a-zA-Z0-9_*\-*\.\/]+$'
+            pattern: 'Bearer [a-zA-Z0-9_*\-*\.\/]+$|^[a-zA-Z0-9_*\-*\.\/]+$'
       responses:
         '200':
           description: |-
@@ -632,12 +632,12 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          description: AAA Issued Identity token
+          description: DX Auth Issued Identity token
           required: true
           schema:
             type: string
             minLength: 1
-            pattern: '^[a-zA-Z0-9_*\-*\.\/]+$'
+            pattern: 'Bearer [a-zA-Z0-9_*\-*\.\/]+$|^[a-zA-Z0-9_*\-*\.\/]+$'
       requestBody:
         description: |
           - `itemId` : The catalogue ID of the item for which the request is to be created
@@ -811,12 +811,12 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          description: AAA Issued Identity token
+          description: DX Auth Issued Identity token
           required: true
           schema:
             type: string
             minLength: 1
-            pattern: '^[a-zA-Z0-9_*\-*\.\/]+$'
+            pattern: 'Bearer [a-zA-Z0-9_*\-*\.\/]+$|^[a-zA-Z0-9_*\-*\.\/]+$'
       requestBody:
         description: |-
           - `requestId` :  ID of the request. Can get this `id` by using the GET Access request API.
@@ -995,11 +995,11 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          description: AAA Issued Identity token
+          description: DX Auth Issued Identity token
           required: true
           schema:
             type: string
-            pattern: '^[a-zA-Z0-9_*\-*\.\/]+$'
+            pattern: 'Bearer [a-zA-Z0-9_*\-*\.\/]+$|^[a-zA-Z0-9_*\-*\.\/]+$'
             minLength: 1
       requestBody:
         description: |-

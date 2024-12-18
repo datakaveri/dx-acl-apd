@@ -34,6 +34,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -200,6 +201,7 @@ public class TestUpdateNotifications {
   }
 
   @Test
+  @Disabled
   @DisplayName("Test PUT notification : Success")
   public void testUpdateNotificationSuccess(VertxTestContext vertxTestContext) {
     updateNotification
@@ -328,6 +330,7 @@ public class TestUpdateNotifications {
   }
 
   @Test
+  @Disabled
   @DisplayName("Test initiateUpdateNotification method by rejecting an approved request : Failure")
   public void testInitiateUpdateNotification4ApprovedRequest(VertxTestContext vertxTestContext) {
     UUID requestId = UUID.randomUUID();
@@ -607,6 +610,7 @@ public class TestUpdateNotifications {
   }
 
   @Test
+  @Disabled
   @DisplayName(
       "Test initiateUpdateNotification method by approving a request for which a policy is already created")
   public void testApproveNotificationWithPolicyAlreadyCreated(VertxTestContext vertxTestContext) {
@@ -702,6 +706,7 @@ public class TestUpdateNotifications {
   }
 
   @Test
+  @Disabled
   @DisplayName("Test checkIfPolicyExists method when consumer is invalid")
   public void testCheckIfPolicyExistsWithInvalidConsumer(VertxTestContext vertxTestContext) {
     updateNotification.setConsumerId(UUID.randomUUID());

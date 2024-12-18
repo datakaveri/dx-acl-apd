@@ -585,12 +585,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -731,23 +731,23 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}"
+								"value": "Bearer {{providerToken}}"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -807,11 +807,11 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}"
+								"value": "Bearer {{providerToken}}"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -867,12 +867,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -934,13 +934,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text"
 							}
 						],
@@ -1000,13 +1000,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text"
 							}
 						],
@@ -1065,7 +1065,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text"
 							}
 						],
@@ -1125,13 +1125,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateTokenForbidden}}",
+								"value": "Bearer {{providerDelegateTokenForbidden}}",
 								"type": "text"
 							}
 						],
@@ -1190,13 +1190,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text"
 							}
 						],
@@ -1264,23 +1264,23 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}"
+								"value": "Bearer {{providerToken}}"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -1392,30 +1392,30 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateTokenForbidden}}",
+								"value": "Bearer {{providerDelegateTokenForbidden}}",
 								"type": "text"
 							}
 						],
@@ -1471,7 +1471,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"disabled": true
 							},
 							{
@@ -1480,7 +1480,7 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateTokenForbidden}}",
+								"value": "Bearer {{providerDelegateTokenForbidden}}",
 								"type": "text"
 							}
 						],
@@ -1547,11 +1547,11 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}"
+								"value": "Bearer {{providerToken}}"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -1613,7 +1613,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"disabled": true
 							},
 							{
@@ -1622,7 +1622,7 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text"
 							}
 						],
@@ -1676,7 +1676,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							}
 						],
@@ -1741,7 +1741,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}"
+								"value": "Bearer {{providerToken}}"
 							},
 							{
 								"key": "Content-Type",
@@ -1749,7 +1749,7 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -1809,12 +1809,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -1876,12 +1876,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -1942,7 +1942,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text"
 							}
 						],
@@ -2002,7 +2002,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							}
 						],
@@ -2062,12 +2062,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -2128,12 +2128,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -2204,24 +2204,24 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -2326,31 +2326,31 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateTokenForbidden}}",
+								"value": "Bearer {{consumerDelegateTokenForbidden}}",
 								"type": "text"
 							}
 						],
@@ -2401,12 +2401,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -2468,12 +2468,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -2534,7 +2534,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text"
 							}
 						],
@@ -2595,12 +2595,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -2661,12 +2661,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -2737,24 +2737,24 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -2807,13 +2807,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text"
 							}
 						],
@@ -2873,12 +2873,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -2949,24 +2949,24 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -3020,13 +3020,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateTokenForbidden}}",
+								"value": "Bearer {{providerDelegateTokenForbidden}}",
 								"type": "text"
 							}
 						],
@@ -3086,12 +3086,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -3162,23 +3162,23 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}"
+								"value": "Bearer {{providerToken}}"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -3238,11 +3238,11 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}"
+								"value": "Bearer {{providerToken}}"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -3298,12 +3298,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -3375,24 +3375,24 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -3445,12 +3445,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -3512,13 +3512,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text"
 							}
 						],
@@ -3588,24 +3588,24 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -3658,12 +3658,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -3734,23 +3734,23 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}"
+								"value": "Bearer {{providerToken}}"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -3810,11 +3810,11 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}"
+								"value": "Bearer {{providerToken}}"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -3870,13 +3870,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text"
 							}
 						],
@@ -3936,7 +3936,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text"
 							}
 						],
@@ -3997,12 +3997,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -4063,12 +4063,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}",
+								"value": "Bearer {{providerToken}}",
 								"type": "text"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -4138,23 +4138,23 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}"
+								"value": "Bearer {{providerToken}}"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerToken}}",
+								"value": "Bearer {{consumerToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							},
 							{
 								"key": "Authorization",
-								"value": "{{consumerDelegateToken}}",
+								"value": "Bearer {{consumerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -4214,11 +4214,11 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerToken}}"
+								"value": "Bearer {{providerToken}}"
 							},
 							{
 								"key": "Authorization",
-								"value": "{{providerDelegateToken}}",
+								"value": "Bearer {{providerDelegateToken}}",
 								"type": "text",
 								"disabled": true
 							}
