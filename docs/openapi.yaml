@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 1.0.1
+  version: 1.1.0
   title: Data-Exchange-ACL-APD
   description: |
 
@@ -35,7 +35,7 @@ info:
 
   contact:
     name: For support contact CDPG Team at
-    email: support@iudx.org.in
+    email: support@datakaveri.org
     url: https://dataforpublicgood.org.in/
   license:
     name: Apache 2.0

@@ -14,7 +14,6 @@ import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.Tuple;
 import iudx.apd.acl.server.apiserver.util.User;
-import iudx.apd.acl.server.common.HttpStatusCode;
 import iudx.apd.acl.server.common.ResponseUrn;
 import iudx.apd.acl.server.policy.PostgresService;
 import java.util.List;
@@ -213,7 +212,7 @@ public class DeleteNotification {
               LOG.error("Failure while executing the query : {}", failureHandler.getMessage());
               JsonObject response =
                   new JsonObject()
-                      .put(TYPE, HttpStatusCode.INTERNAL_SERVER_ERROR.getValue())
+                      .put(TYPE, INTERNAL_SERVER_ERROR.getValue())
                       .put(TITLE, ResponseUrn.DB_ERROR_URN.getUrn())
                       .put(DETAIL, "Failure while executing query");
               handler.handle(Future.failedFuture(response.encode()));

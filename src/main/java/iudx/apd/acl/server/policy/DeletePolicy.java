@@ -183,7 +183,7 @@ public class DeletePolicy {
                 LOG.error("Failure : policy does not belong to the user");
                 JsonObject failureResponse =
                     new JsonObject()
-                        .put(TYPE, HttpStatusCode.FORBIDDEN.getValue())
+                        .put(TYPE, FORBIDDEN.getValue())
                         .put(TITLE, ResponseUrn.FORBIDDEN_URN.getUrn())
                         .put(DETAIL, FAILURE_MESSAGE + ", as policy doesn't belong to the user");
                 promise.fail(failureResponse.encode());
