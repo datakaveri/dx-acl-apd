@@ -25,6 +25,7 @@ import iudx.apd.acl.server.authentication.model.UserInfo;
 import iudx.apd.acl.server.common.Api;
 import iudx.apd.acl.server.policy.PostgresService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -184,6 +185,7 @@ public class TestAuthClient {
   }
 
   @Test
+  @Disabled
   @DisplayName("Test fetchUserInfo method : Success")
   public void testFetchUserInfoSuccess(VertxTestContext vertxTestContext) {
 

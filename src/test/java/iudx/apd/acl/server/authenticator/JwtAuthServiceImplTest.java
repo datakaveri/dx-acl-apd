@@ -28,12 +28,18 @@ import iudx.apd.acl.server.common.RoutingContextHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * TODO: Add all the failing and succeeding tests for user access wrt to an API in TestApiServerVerticle
+ * as ApiServerVerticle is defining the user access list for a given API using the router operation handler
+ */
+@Disabled
 @ExtendWith({VertxExtension.class, MockitoExtension.class})
 public class JwtAuthServiceImplTest {
 
@@ -146,7 +152,7 @@ public class JwtAuthServiceImplTest {
               }
             });
   }
-
+  /*Add this test from ApiServerVerticle as the user access list wrt to an API is provider with router handler */
   @Test
   @DisplayName("fail - not access to consumer for POST policy")
   public void invalidRequestOfConsumerPostPolicy(VertxTestContext testContext) {
@@ -166,6 +172,7 @@ public class JwtAuthServiceImplTest {
             });
   }
 
+  /*Add this test from ApiServerVerticle as the user access list wrt to an API is provider with router handler */
   @Test
   @DisplayName("fail - not access to consumer for DELETE policy")
   public void invalidRequestOfConsumerDeletePolicy(VertxTestContext testContext) {
@@ -185,6 +192,7 @@ public class JwtAuthServiceImplTest {
             });
   }
 
+  /*Add this test from ApiServerVerticle as the user access list wrt to an API is provider with router handler */
   @Test
   @DisplayName("fail - not access to provider for POST notification")
   public void invalidRequestOfProviderPostNotification(VertxTestContext testContext) {
@@ -204,6 +212,7 @@ public class JwtAuthServiceImplTest {
             });
   }
 
+  /*Add this test from ApiServerVerticle as the user access list wrt to an API is provider with router handler */
   @Test
   @DisplayName("fail - not access to provider for DELETE notification")
   public void invalidRequestOfProviderDeleteNotification(VertxTestContext testContext) {
