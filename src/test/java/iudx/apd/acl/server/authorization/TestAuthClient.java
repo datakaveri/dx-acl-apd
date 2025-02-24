@@ -19,7 +19,7 @@ import iudx.apd.acl.server.apiserver.util.Role;
 import iudx.apd.acl.server.apiserver.util.User;
 import iudx.apd.acl.server.aaaService.AuthClient;
 import iudx.apd.acl.server.authentication.AuthenticationService;
-import iudx.apd.acl.server.authentication.handler.AuthHandler;
+import iudx.apd.acl.server.authentication.handler.authentication.AuthHandler;
 import iudx.apd.acl.server.authentication.model.DxRole;
 import iudx.apd.acl.server.authentication.model.UserInfo;
 import iudx.apd.acl.server.common.Api;

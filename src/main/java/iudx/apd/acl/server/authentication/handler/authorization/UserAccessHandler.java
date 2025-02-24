@@ -1,4 +1,4 @@
-package iudx.apd.acl.server.authentication.handler;
+package iudx.apd.acl.server.authentication.handler.authorization;
 
 import static iudx.apd.acl.server.authentication.model.DxRole.DELEGATE;
 import static iudx.apd.acl.server.authentication.util.Constants.INSERT_USER_TABLE;

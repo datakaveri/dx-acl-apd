@@ -31,19 +31,27 @@ public class RoutingContextHelper {
         .put(API_METHOD, getMethod(routingContext));
   }
 
-  /* token would can be of the type : Bearer <JWT-Token> or <JWT-Token> */
-  /* allowing both the tokens to be authenticated for now */
-  /* TODO: later, 401 error is thrown if the token does not contain Bearer keyword */
   public static String getToken(RoutingContext routingContext) {
-    String token = routingContext.request().headers().get(AUTHORIZATION_KEY);
-    boolean isItABearerToken = token.contains(HEADER_TOKEN_BEARER);
-    if (isItABearerToken && token.trim().split(" ").length == 2) {
-      String[] tokenWithoutBearer = token.split(HEADER_TOKEN_BEARER);
+    /* token would can be of the type : Bearer <JWT-Token>, <JWT-Token> */
+    /* Send Bearer <JWT-Token> if Authorization header is present */
+    /* allowing both the tokens to be authenticated for now */
+    /* TODO: later, 401 error is thrown if the token does not contain Bearer keyword */
+    String token = routingContext.request().headers().get(HEADER_BEARER_AUTHORIZATION);
+    boolean isValidBearerToken = token != null && token.trim().split(" ").length == 2;
+    boolean isBearerAuthHeaderPresent = isValidBearerToken && (token.contains(HEADER_TOKEN_BEARER));
+    boolean isKcTokenPresent = isValidBearerToken && (token.contains("bearer"));
+    String[] tokenWithoutBearer = new String[] {};
+    if (isValidBearerToken) {
+      if (isBearerAuthHeaderPresent) {
+        tokenWithoutBearer = (token.split(HEADER_TOKEN_BEARER));
+      } else if (isKcTokenPresent) {
+        tokenWithoutBearer = (token.split("bearer"));
+      }
       token = tokenWithoutBearer[1].replaceAll("\\s", "");
+      return token;
     }
-    return token;
+    return routingContext.request().headers().get(HEADER_TOKEN);
   }
-
   public static JsonObject getVerifyAuthInfo(RoutingContext routingContext) {
     return new JsonObject()
         .put(API_ENDPOINT, getRequestPath(routingContext))

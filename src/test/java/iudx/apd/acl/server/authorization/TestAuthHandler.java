@@ -18,7 +18,7 @@ import iudx.apd.acl.server.Utility;
 import iudx.apd.acl.server.apiserver.util.User;
 import iudx.apd.acl.server.aaaService.AuthClient;
 import iudx.apd.acl.server.authentication.AuthenticationService;
-import iudx.apd.acl.server.authentication.handler.AuthHandler;
+import iudx.apd.acl.server.authentication.handler.authentication.AuthHandler;
 import iudx.apd.acl.server.authentication.model.JwtData;
 import iudx.apd.acl.server.common.Api;
 import iudx.apd.acl.server.common.RoutingContextHelper;
@@ -81,7 +81,6 @@ public class TestAuthHandler {
     lenient().when(httpServerRequest.method()).thenReturn(httpMethod);
     lenient().when(httpMethod.toString()).thenReturn("someMethod");
     lenient().when(httpServerRequest.path()).thenReturn(api.getVerifyUrl());
-    lenient().when(authenticationService.tokenIntrospectForVerify(any())).thenReturn(voidFuture);
     //        lenient().when(voidFuture.onSuccess(any())).thenReturn(Future.succeededFuture());
     //        when(voidFuture.succeeded()).thenReturn(true);
 
@@ -149,7 +148,6 @@ public class TestAuthHandler {
     verify(routingContext, times(1)).next();
     verify(voidAsyncResult, times(1)).succeeded();
     assertTrue(voidAsyncResult.succeeded());
-    verify(authenticationService, times(1)).tokenIntrospectForVerify(any());
     verify(httpServerRequest, times(1)).path();
     verify(httpServerRequest, times(1)).method();
     verify(routingContext, times(2)).request();
@@ -178,7 +176,6 @@ public class TestAuthHandler {
     assertFalse(voidAsyncResult.succeeded());
     assertTrue(voidAsyncResult.failed());
     assertEquals(failureMessage, throwable.getMessage());
-    verify(authenticationService, times(1)).tokenIntrospectForVerify(any());
     verify(httpServerRequest, times(1)).path();
     verify(httpServerRequest, times(1)).method();
     verify(routingContext, times(2)).request();
@@ -218,14 +215,14 @@ public class TestAuthHandler {
     JwtData jwtData = mock(JwtData.class);
 
     when(httpServerRequest.path()).thenReturn(api.getRequestPoliciesUrl());
-    when(authenticationService.tokenIntrospect(any()))
+    when(authenticationService.decodeToken(any()))
         .thenReturn(Future.succeededFuture(jwtData));
 
     authHandler.handle(routingContext);
 
-    verify(routingContext, times(3)).request();
+    verify(routingContext, times(2)).request();
 
-    verify(authenticationService, times(1)).tokenIntrospect(any());
+    verify(authenticationService, times(1)).decodeToken(any());
 
     vertxTestContext.completeNow();
   }
@@ -303,13 +300,13 @@ public class TestAuthHandler {
         .when(client.fetchUserInfo(any()))
         .thenReturn(Future.failedFuture("Something went wrong..."));
     when(httpServerRequest.path()).thenReturn(api.getRequestPoliciesUrl());
-    when(authenticationService.tokenIntrospect(any()))
+    when(authenticationService.decodeToken(any()))
         .thenReturn(Future.succeededFuture(jwtData));
     lenient().when(routingContext.response()).thenReturn(httpServerResponse);
     authHandler.handle(routingContext);
 
-    verify(routingContext, times(3)).request();
-    verify(authenticationService, times(1)).tokenIntrospect(any());
+    verify(routingContext, times(2)).request();
+    verify(authenticationService, times(1)).decodeToken(any());
     vertxTestContext.completeNow();
   }
 

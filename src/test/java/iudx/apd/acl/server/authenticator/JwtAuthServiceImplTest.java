@@ -4,16 +4,9 @@ import static iudx.apd.acl.server.apiserver.util.Constants.API_ENDPOINT;
 import static iudx.apd.acl.server.apiserver.util.Constants.API_METHOD;
 import static iudx.apd.acl.server.apiserver.util.Constants.HEADER_TOKEN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
 
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 import io.micrometer.core.ipc.http.HttpSender.Method;
-import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.PubSecKeyOptions;
 import io.vertx.ext.auth.jwt.JWTAuth;
@@ -22,7 +15,6 @@ import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import iudx.apd.acl.server.apiserver.util.Role;
 import iudx.apd.acl.server.authentication.JwtAuthenticationServiceImpl;
-import iudx.apd.acl.server.authentication.model.JwtData;
 import iudx.apd.acl.server.common.Api;
 import iudx.apd.acl.server.common.RoutingContextHelper;
 import org.apache.logging.log4j.LogManager;
@@ -32,12 +24,12 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
- * TODO: Add all the failing and succeeding tests for user access wrt to an API in TestApiServerVerticle
- * as ApiServerVerticle is defining the user access list for a given API using the router operation handler
+ * TODO: Add all the failing and succeeding tests for user access wrt to an API in
+ * TestApiServerVerticle as ApiServerVerticle is defining the user access list for a given API using
+ * the router operation handler
  */
 @Disabled
 @ExtendWith({VertxExtension.class, MockitoExtension.class})
@@ -68,7 +60,7 @@ public class JwtAuthServiceImplTest {
     JWTAuth jwtAuth = JWTAuth.create(vertx, jwtAuthOptions);
 
     RoutingContextHelper routingContextHelper = new RoutingContextHelper();
-    jwtAuthenticationService = new JwtAuthenticationServiceImpl(jwtAuth, authConfig);
+    jwtAuthenticationService = new JwtAuthenticationServiceImpl(jwtAuth);
 
     LOGGER.info("Auth tests setup complete");
 
@@ -82,7 +74,7 @@ public class JwtAuthServiceImplTest {
     authConfig.put(API_ENDPOINT, apis.getPoliciesUrl());
     authConfig.put(HEADER_TOKEN, JwtTokenHelper.consumerToken);
     jwtAuthenticationService
-        .tokenIntrospect(authConfig)
+        .decodeToken(JwtTokenHelper.consumerToken)
         .onComplete(
             handler -> {
               if (handler.succeeded()) {
@@ -100,7 +92,7 @@ public class JwtAuthServiceImplTest {
     authConfig.put(API_ENDPOINT, apis.getPoliciesUrl());
     authConfig.put(HEADER_TOKEN, JwtTokenHelper.consumerDelegateToken);
     jwtAuthenticationService
-        .tokenIntrospect(authConfig)
+        .decodeToken(JwtTokenHelper.consumerDelegateToken)
         .onComplete(
             handler -> {
               if (handler.succeeded()) {
@@ -121,7 +113,7 @@ public class JwtAuthServiceImplTest {
     authConfig.put(API_ENDPOINT, apis.getPoliciesUrl());
     authConfig.put(HEADER_TOKEN, JwtTokenHelper.providerToken);
     jwtAuthenticationService
-        .tokenIntrospect(authConfig)
+        .decodeToken(JwtTokenHelper.providerToken)
         .onComplete(
             handler -> {
               if (handler.succeeded()) {
@@ -139,7 +131,7 @@ public class JwtAuthServiceImplTest {
     authConfig.put(API_ENDPOINT, apis.getRequestPoliciesUrl());
     authConfig.put(HEADER_TOKEN, JwtTokenHelper.providerDelegateToken);
     jwtAuthenticationService
-        .tokenIntrospect(authConfig)
+        .decodeToken(JwtTokenHelper.providerDelegateToken)
         .onComplete(
             handler -> {
               if (handler.succeeded()) {
@@ -152,6 +144,7 @@ public class JwtAuthServiceImplTest {
               }
             });
   }
+
   /*Add this test from ApiServerVerticle as the user access list wrt to an API is provider with router handler */
   @Test
   @DisplayName("fail - not access to consumer for POST policy")
@@ -160,7 +153,7 @@ public class JwtAuthServiceImplTest {
     authConfig.put(API_ENDPOINT, apis.getPoliciesUrl());
     authConfig.put(HEADER_TOKEN, JwtTokenHelper.consumerDelegateToken);
     jwtAuthenticationService
-        .tokenIntrospect(authConfig)
+        .decodeToken(JwtTokenHelper.consumerDelegateToken)
         .onComplete(
             handler -> {
               if (handler.succeeded()) {
@@ -180,7 +173,7 @@ public class JwtAuthServiceImplTest {
     authConfig.put(API_ENDPOINT, apis.getPoliciesUrl());
     authConfig.put(HEADER_TOKEN, JwtTokenHelper.consumerDelegateToken);
     jwtAuthenticationService
-        .tokenIntrospect(authConfig)
+        .decodeToken(JwtTokenHelper.consumerDelegateToken)
         .onComplete(
             handler -> {
               if (handler.succeeded()) {
@@ -200,7 +193,7 @@ public class JwtAuthServiceImplTest {
     authConfig.put(API_ENDPOINT, apis.getRequestPoliciesUrl());
     authConfig.put(HEADER_TOKEN, JwtTokenHelper.providerToken);
     jwtAuthenticationService
-        .tokenIntrospect(authConfig)
+        .decodeToken(JwtTokenHelper.providerToken)
         .onComplete(
             handler -> {
               LOGGER.info("result is : " + handler);
@@ -220,7 +213,7 @@ public class JwtAuthServiceImplTest {
     authConfig.put(API_ENDPOINT, apis.getRequestPoliciesUrl());
     authConfig.put(HEADER_TOKEN, JwtTokenHelper.providerToken);
     jwtAuthenticationService
-        .tokenIntrospect(authConfig)
+        .decodeToken(JwtTokenHelper.providerToken)
         .onComplete(
             handler -> {
               if (handler.succeeded()) {
@@ -235,251 +228,12 @@ public class JwtAuthServiceImplTest {
   @DisplayName("decode invalid jwt")
   public void decodeJwtFailure(VertxTestContext testContext) {
     jwtAuthenticationService
-        .decodeJwt(JwtTokenHelper.invalidToken)
+        .decodeToken(JwtTokenHelper.invalidToken)
         .onComplete(
             handler -> {
               if (handler.succeeded()) {
                 testContext.failNow(handler.cause());
               } else {
-                testContext.completeNow();
-              }
-            });
-  }
-
-  @Test
-  @DisplayName("invalid token -> invalid issuer")
-  public void invalidTokenIssuerInvalid(VertxTestContext vertxTestContext) {
-    JwtData jwtData = new JwtData();
-    jwtData.setSub("fd47486b-3497-4248-ac1e-082e4d37a66c");
-    jwtData.setIss("wrong.issuer.io");
-    jwtData.setAud("rs.iudx.io");
-    jwtData.setExp(1886135512);
-    jwtData.setIat(1686135512);
-    jwtData.setIid("rs:rs.iudx.io");
-    jwtData.setRole("consumer");
-    jwtData.setCons(new JsonObject().put("access", new JsonArray().add("api").add("sub")));
-
-    jwtAuthenticationService
-        .validateJwtAccess(jwtData)
-        .onComplete(
-            handler -> {
-              if (handler.succeeded()) {
-                vertxTestContext.failNow("valid token");
-              } else vertxTestContext.completeNow();
-            });
-  }
-
-  @Test
-  @DisplayName("invalid token -> aud value null")
-  public void invalidTokenAudValueNull(VertxTestContext vertxTestContext) {
-    JwtData jwtData = new JwtData();
-    jwtData.setSub("fd47486b-3497-4248-ac1e-082e4d37a66c");
-    jwtData.setIss("authvertx.iudx.io");
-    jwtData.setAud(null);
-    jwtData.setExp(1886135512);
-    jwtData.setIat(1686135512);
-    jwtData.setIid("rs:rs.iudx.io");
-    jwtData.setRole("consumer");
-    jwtData.setCons(new JsonObject().put("access", new JsonArray().add("api").add("sub")));
-
-    jwtAuthenticationService
-        .validateJwtAccess(jwtData)
-        .onComplete(
-            handler -> {
-              if (handler.succeeded()) {
-                vertxTestContext.failNow("valid token");
-              } else vertxTestContext.completeNow();
-            });
-  }
-
-  @Test
-  @DisplayName("invalid token -> invalid aud value")
-  public void invalidTokenInvalidIid(VertxTestContext vertxTestContext) {
-    JwtData jwtData = new JwtData();
-    jwtData.setSub("fd47486b-3497-4248-ac1e-082e4d37a66c");
-    jwtData.setIss("authvertx.iudx.io");
-    jwtData.setAud("wrong.aud.value");
-    jwtData.setExp(1886135512);
-    jwtData.setIat(1686135512);
-    jwtData.setIid("rs:rs.iudx.io");
-    jwtData.setRole("consumer");
-    jwtData.setCons(new JsonObject().put("access", new JsonArray().add("api").add("sub")));
-
-    jwtAuthenticationService
-        .validateJwtAccess(jwtData)
-        .onComplete(
-            handler -> {
-              if (handler.succeeded()) {
-                vertxTestContext.failNow("valid token");
-              } else vertxTestContext.completeNow();
-            });
-  }
-
-  @Test
-  @DisplayName("success - allow access for authToken")
-  public void allow4AuthToken(VertxTestContext testContext) {
-    authConfig.put(HEADER_TOKEN, JwtTokenHelper.authToken);
-    jwtAuthenticationService
-        .tokenIntrospectForVerify(authConfig)
-        .onComplete(
-            handler -> {
-              if (handler.succeeded()) {
-                testContext.completeNow();
-              } else {
-                testContext.failNow("invalid access");
-              }
-            });
-  }
-
-  @Test
-  @DisplayName("failure - wrong token in authToken")
-  public void invalidAuthTokenFail(VertxTestContext testContext) {
-    authConfig.put(HEADER_TOKEN, JwtTokenHelper.consumerToken);
-    jwtAuthenticationService
-        .tokenIntrospectForVerify(authConfig)
-        .onComplete(
-            handler -> {
-              if (handler.succeeded()) {
-                testContext.failNow("invalid access");
-              } else {
-                testContext.completeNow();
-              }
-            });
-  }
-
-  @Test
-  @DisplayName("auth token failure - auth token can't have null for sub")
-  public void invalidAuthTokenFailInvalid1(VertxTestContext testContext) {
-    authConfig.put(HEADER_TOKEN, JwtTokenHelper.authToken);
-    authConfig.put("issuer", "wrongIssuer");
-
-    JwtData mockedJwtData = mock(JwtData.class);
-    when(mockedJwtData.getSub()).thenReturn(null);
-
-    JwtAuthenticationServiceImpl jwtAuthenticationServiceSpy = spy(jwtAuthenticationService);
-    doReturn(Future.succeededFuture(mockedJwtData))
-        .when(jwtAuthenticationServiceSpy)
-        .decodeJwt(anyString());
-
-    jwtAuthenticationServiceSpy
-        .tokenIntrospectForVerify(authConfig)
-        .onComplete(
-            handler -> {
-              if (handler.succeeded()) {
-                testContext.failNow("invalid access");
-              } else {
-                assertEquals("No sub value in JWT", handler.cause().getMessage());
-                testContext.completeNow();
-              }
-            });
-  }
-
-  @Test
-  @DisplayName("auth token failure - wrongIssuer")
-  public void invalid4AuthTokenFailInvalid2(VertxTestContext testContext) {
-    authConfig.put(HEADER_TOKEN, JwtTokenHelper.authToken);
-
-    JwtData mockedJwtData = mock(JwtData.class);
-    when(mockedJwtData.getSub()).thenReturn("sub");
-    when(mockedJwtData.getIss()).thenReturn("wrongIssuer");
-
-    JwtAuthenticationServiceImpl jwtAuthenticationServiceSpy = spy(jwtAuthenticationService);
-    doReturn(Future.succeededFuture(mockedJwtData))
-        .when(jwtAuthenticationServiceSpy)
-        .decodeJwt(anyString());
-
-    jwtAuthenticationServiceSpy
-        .tokenIntrospectForVerify(authConfig)
-        .onComplete(
-            handler -> {
-              if (handler.succeeded()) {
-                testContext.failNow("invalid access");
-              } else {
-                assertEquals("Incorrect issuer value in JWT", handler.cause().getMessage());
-                testContext.completeNow();
-              }
-            });
-  }
-
-  @Test
-  @DisplayName("auth token failure - no aud value")
-  public void invalid4AuthTokenFailInvalid3(VertxTestContext testContext) {
-    authConfig.put(HEADER_TOKEN, JwtTokenHelper.authToken);
-
-    JwtData mockedJwtData = mock(JwtData.class);
-    when(mockedJwtData.getSub()).thenReturn("sub");
-    when(mockedJwtData.getIss()).thenReturn("authvertx.iudx.io");
-    when(mockedJwtData.getAud()).thenReturn("");
-
-    JwtAuthenticationServiceImpl jwtAuthenticationServiceSpy = spy(jwtAuthenticationService);
-    doReturn(Future.succeededFuture(mockedJwtData))
-        .when(jwtAuthenticationServiceSpy)
-        .decodeJwt(anyString());
-
-    jwtAuthenticationServiceSpy
-        .tokenIntrospectForVerify(authConfig)
-        .onComplete(
-            handler -> {
-              if (handler.succeeded()) {
-                testContext.failNow("invalid access");
-              } else {
-                assertEquals("No audience value in JWT", handler.cause().getMessage());
-                testContext.completeNow();
-              }
-            });
-  }
-
-  @Test
-  @DisplayName("auth token failure - incorrect aud value")
-  public void invalid4AuthTokenFailInvalid4(VertxTestContext testContext) {
-    authConfig.put(HEADER_TOKEN, JwtTokenHelper.authToken);
-
-    JwtData mockedJwtData = mock(JwtData.class);
-    when(mockedJwtData.getSub()).thenReturn("sub");
-    when(mockedJwtData.getIss()).thenReturn("authvertx.iudx.io");
-    when(mockedJwtData.getAud()).thenReturn("wrongAud");
-
-    JwtAuthenticationServiceImpl jwtAuthenticationServiceSpy = spy(jwtAuthenticationService);
-    doReturn(Future.succeededFuture(mockedJwtData))
-        .when(jwtAuthenticationServiceSpy)
-        .decodeJwt(anyString());
-
-    jwtAuthenticationServiceSpy
-        .tokenIntrospectForVerify(authConfig)
-        .onComplete(
-            handler -> {
-              if (handler.succeeded()) {
-                testContext.failNow("invalid access");
-              } else {
-                assertEquals("Incorrect audience value in JWT", handler.cause().getMessage());
-                testContext.completeNow();
-              }
-            });
-  }
-
-  @Test
-  @DisplayName("auth token failure - incorrect sub value")
-  public void invalid4AuthTokenFailInvalid5(VertxTestContext testContext) {
-    authConfig.put(HEADER_TOKEN, JwtTokenHelper.authToken);
-
-    JwtData mockedJwtData = mock(JwtData.class);
-    when(mockedJwtData.getIss()).thenReturn("authvertx.iudx.io");
-    when(mockedJwtData.getAud()).thenReturn("acl-apd.iudx.io");
-    when(mockedJwtData.getSub()).thenReturn("incorrect sub");
-
-    JwtAuthenticationServiceImpl jwtAuthenticationServiceSpy = spy(jwtAuthenticationService);
-    doReturn(Future.succeededFuture(mockedJwtData))
-        .when(jwtAuthenticationServiceSpy)
-        .decodeJwt(anyString());
-
-    jwtAuthenticationServiceSpy
-        .tokenIntrospectForVerify(authConfig)
-        .onComplete(
-            handler -> {
-              if (handler.succeeded()) {
-                testContext.failNow("invalid access");
-              } else {
-                assertEquals("Incorrect subject value in JWT", handler.cause().getMessage());
                 testContext.completeNow();
               }
             });

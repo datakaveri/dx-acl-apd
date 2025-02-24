@@ -3,6 +3,7 @@ package iudx.apd.acl.server.authentication.util;
 public class Constants {
   public static final String SEARCH_PATH = "/user/search";
   public static final String AUTH_CERTIFICATE_PATH = "/cert";
+  public static final String AUTH_JWKS_PATH = "/jwks";
   public static final String USER_ID = "userId";
   public static final String IS_DELEGATE = "isDelegate";
   public static final String ROLE = "role";

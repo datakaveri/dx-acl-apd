@@ -14,6 +14,7 @@ public class Constants {
   public static final String X_CONTENT_TYPE_OPTIONS_NOSNIFF = "nosniff";
 
   public static final String HEADER_TOKEN = "token";
+  public static final String HEADER_BEARER_AUTHORIZATION = "Authorization";
   public static final String HEADER_TOKEN_BEARER = "Bearer";
   public static final String HEADER_HOST = "Host";
   public static final String HEADER_ACCEPT = "Accept";

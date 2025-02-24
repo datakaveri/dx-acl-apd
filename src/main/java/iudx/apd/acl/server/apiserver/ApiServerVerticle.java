@@ -29,12 +29,12 @@ import io.vertx.ext.web.openapi.RouterBuilder;
 import iudx.apd.acl.server.aaaService.AuthClient;
 import iudx.apd.acl.server.apiserver.util.User;
 import iudx.apd.acl.server.auditing.AuditingService;
-import iudx.apd.acl.server.authentication.handler.Authentication;
 import iudx.apd.acl.server.authentication.AuthenticationService;
-import iudx.apd.acl.server.authentication.handler.AuthHandler;
-import iudx.apd.acl.server.authentication.handler.UserAccessHandler;
-import iudx.apd.acl.server.authentication.handler.AuthorizationHandler;
-import iudx.apd.acl.server.authentication.handler.VerifyAuthHandler;
+import iudx.apd.acl.server.authentication.handler.Authentication;
+import iudx.apd.acl.server.authentication.handler.authentication.AuthHandler;
+import iudx.apd.acl.server.authentication.handler.authentication.TokenIntrospectHandler;
+import iudx.apd.acl.server.authentication.handler.authorization.AuthorizationHandler;
+import iudx.apd.acl.server.authentication.handler.authorization.UserAccessHandler;
 import iudx.apd.acl.server.authentication.model.DxRole;
 import iudx.apd.acl.server.authentication.model.UserInfo;
 import iudx.apd.acl.server.common.Api;
@@ -89,11 +89,11 @@ public class ApiServerVerticle extends AbstractVerticle {
   private WebClientOptions webClientOptions;
   private AuthHandler authHandler;
   private UserAccessHandler userAccessHandler;
-  private VerifyAuthHandler verifyAuthHandler;
   private Handler<RoutingContext> providerApiAccessHandler;
   private Handler<RoutingContext> consumerApiAccessHandler;
   private Handler<RoutingContext> apiAccessHandler;
   private UserInfo userInfo;
+
   /**
    * This method is used to start the Verticle. It deploys a verticle in a cluster, reads the
    * configuration, obtains a proxy for the Event bus services exposed through service discovery,
@@ -120,10 +120,17 @@ public class ApiServerVerticle extends AbstractVerticle {
     pgService = new PostgresService(config(), vertx);
     FailureHandler failureHandler = new FailureHandler();
     authHandler = new AuthHandler(authenticator);
-    verifyAuthHandler = new VerifyAuthHandler(authenticator);
-    providerApiAccessHandler = new AuthorizationHandler().setUserRolesForEndpoint(DxRole.PROVIDER, DxRole.DELEGATE);
-    consumerApiAccessHandler = new AuthorizationHandler().setUserRolesForEndpoint(DxRole.CONSUMER, DxRole.DELEGATE);
-    apiAccessHandler = new AuthorizationHandler().setUserRolesForEndpoint(DxRole.CONSUMER, DxRole.PROVIDER, DxRole.DELEGATE);
+    providerApiAccessHandler =
+        new AuthorizationHandler().setUserRolesForEndpoint(DxRole.PROVIDER, DxRole.DELEGATE);
+    consumerApiAccessHandler =
+        new AuthorizationHandler().setUserRolesForEndpoint(DxRole.CONSUMER, DxRole.DELEGATE);
+    apiAccessHandler =
+        new AuthorizationHandler()
+            .setUserRolesForEndpoint(DxRole.CONSUMER, DxRole.PROVIDER, DxRole.DELEGATE);
+    String apdUrl = config().getString("apdURL");
+    Handler<RoutingContext> validateToken = new TokenIntrospectHandler().validateToken();
+    Handler<RoutingContext> validateKeycloakToken =
+        new TokenIntrospectHandler().validateKeycloakToken(apdUrl);
 
     userInfo = new UserInfo();
 
@@ -138,6 +145,7 @@ public class ApiServerVerticle extends AbstractVerticle {
               routerBuilder
                   .operation(CREATE_POLICY_API)
                   .handler(authHandler)
+                  .handler(validateToken)
                   .handler(providerApiAccessHandler)
                   .handler(userAccessHandler)
                   .handler(this::postPoliciesHandler)
@@ -146,6 +154,7 @@ public class ApiServerVerticle extends AbstractVerticle {
               routerBuilder
                   .operation(GET_POLICY_API)
                   .handler(authHandler)
+                  .handler(validateToken)
                   .handler(apiAccessHandler)
                   .handler(userAccessHandler)
                   .handler(this::getPoliciesHandler)
@@ -154,6 +163,7 @@ public class ApiServerVerticle extends AbstractVerticle {
               routerBuilder
                   .operation(DELETE_POLICY_API)
                   .handler(authHandler)
+                  .handler(validateToken)
                   .handler(providerApiAccessHandler)
                   .handler(userAccessHandler)
                   .handler(this::deletePoliciesHandler)
@@ -162,6 +172,7 @@ public class ApiServerVerticle extends AbstractVerticle {
               routerBuilder
                   .operation(CREATE_NOTIFICATIONS_API)
                   .handler(authHandler)
+                  .handler(validateToken)
                   .handler(consumerApiAccessHandler)
                   .handler(userAccessHandler)
                   .handler(this::postAccessRequestHandler)
@@ -170,6 +181,7 @@ public class ApiServerVerticle extends AbstractVerticle {
               routerBuilder
                   .operation(UPDATE_NOTIFICATIONS_API)
                   .handler(authHandler)
+                  .handler(validateToken)
                   .handler(providerApiAccessHandler)
                   .handler(userAccessHandler)
                   .handler(this::putAccessRequestHandler)
@@ -178,6 +190,7 @@ public class ApiServerVerticle extends AbstractVerticle {
               routerBuilder
                   .operation(GET_NOTIFICATIONS_API)
                   .handler(authHandler)
+                  .handler(validateToken)
                   .handler(apiAccessHandler)
                   .handler(userAccessHandler)
                   .handler(this::getAccessRequestHandler)
@@ -186,6 +199,7 @@ public class ApiServerVerticle extends AbstractVerticle {
               routerBuilder
                   .operation(DELETE_NOTIFICATIONS_API)
                   .handler(authHandler)
+                  .handler(validateToken)
                   .handler(consumerApiAccessHandler)
                   .handler(userAccessHandler)
                   .handler(this::deleteAccessRequestHandler)
@@ -193,7 +207,8 @@ public class ApiServerVerticle extends AbstractVerticle {
 
               routerBuilder
                   .operation(VERIFY_API)
-                  .handler(verifyAuthHandler)
+                  .handler(authHandler)
+                  .handler(validateKeycloakToken)
                   .handler(userAccessHandler)
                   .handler(this::verifyRequestHandler)
                   .failureHandler(failureHandler);
