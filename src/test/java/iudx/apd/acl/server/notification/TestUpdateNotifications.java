@@ -931,8 +931,6 @@ public class TestUpdateNotifications {
                       .onComplete(
                           handler -> {
                             if (handler.succeeded()) {
-                              System.out.println(
-                                  "handler.result().encode()" + handler.result().encode());
                               vertxTestContext.failNow(
                                   "Succeeded when there was a failure in approve notification");
 

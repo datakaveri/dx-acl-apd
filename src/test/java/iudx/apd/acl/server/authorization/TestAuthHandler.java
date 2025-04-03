@@ -71,7 +71,7 @@ public class TestAuthHandler {
     container.start();
     postgresService = utility.setUp(container);
     config = new JsonObject();
-    api = Api.getInstance("/dx/apd/acl/v3");
+    api = Api.getInstance("/org/cdpg/dx/apd/acl/v3");
     authenticationService = mock(AuthenticationService.class);
     client = mock(AuthClient.class);
     routingContext = mock(RoutingContext.class);

@@ -9,7 +9,6 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import iudx.apd.acl.server.apiserver.util.User;
 import iudx.apd.acl.server.policy.PolicyService;
-import iudx.apd.acl.server.policy.PolicyServiceVertxEBProxy;
 
 @VertxGen
 @ProxyGen
