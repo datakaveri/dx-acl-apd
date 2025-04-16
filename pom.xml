@@ -72,7 +72,12 @@
       <version>${vertx.version}</version>
       <classifier>processor</classifier>
     </dependency>
-
+<!--    For Rowmapped and columnMapped annotation -->
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-sql-client-templates</artifactId>
+      <version>${vertx.version}</version>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
     <dependency>
       <groupId>org.postgresql</groupId>

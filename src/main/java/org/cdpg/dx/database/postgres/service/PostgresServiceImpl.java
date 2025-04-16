@@ -5,6 +5,9 @@ import io.vertx.sqlclient.Pool;
 import io.vertx.sqlclient.Tuple;
 import io.vertx.sqlclient.RowSet;
 import io.vertx.sqlclient.Row;
+import io.vertx.sqlclient.templates.SqlTemplate;
+import java.util.Map;
+import org.cdpg.dx.acl.dao.model.PolicyDto;
 import org.cdpg.dx.database.postgres.models.*;
 
 import io.vertx.core.json.JsonObject;
@@ -44,6 +47,17 @@ public class PostgresServiceImpl implements PostgresService {
         return client.preparedQuery(sql).execute(Tuple.from(params))
             .map(this::convertToQueryResult);
     }
+
+//    public Future executeQuery(String sql, Object param, Class<?> tClass){
+//        PolicyDto policyDto = new PolicyDto();
+//        policyDto.setConstraints(null);
+//        SqlTemplate.forQuery(client,sql).mapFrom(tClass).execute(param,handler -> {
+//
+//            })
+//            .map(this::convertToQueryResult);
+//
+//    return null;
+//    }
 
 //    @Override
 //    public Future<QueryResult> execute(Query query) {
