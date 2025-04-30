@@ -1,4 +1,4 @@
-package org.cdpg.dx.acl.dao.util;
+package org.cdpg.dx.acl.notification.dao.util;
 
 import java.util.List;
 
@@ -34,16 +34,16 @@ public class Constants {
   public static final String APPROVED_ACCESS_REQUEST_TABLE = "approved_access_requests";
   public static final String RESOURCE_ENTITY_TABLE = "resource_entity";
   public static final List<String> POLICY_TABLE_COLUMNS =
-      List.of(DB_ID, DB_CONSUMER_EMAIL, DB_ITEM_ID, DB_OWNER_ID, DB_STATUS, DB_EXPIRY_AT, DB_CREATED_AT, DB_UPDATED_AT,
+      List.of(DB_CONSUMER_EMAIL, DB_ITEM_ID, DB_OWNER_ID, DB_STATUS, DB_EXPIRY_AT,
           DB_CONSTRAINTS);
   public static final List<String> USER_TABLE_COLUMNS =
-      List.of(DB_ID, DB_EMAIL_ID, DB_FIRST_NAME, DB_LAST_NAME, DB_CREATED_AT, DB_UPDATED_AT);
+      List.of(DB_ID, DB_EMAIL_ID, DB_FIRST_NAME, DB_LAST_NAME);
   public static final List<String> NOTIFICATION_TABLE_COLUMNS =
-      List.of(DB_ID, DB_USER_ID, DB_ITEM_ID, DB_OWNER_ID, DB_STATUS, DB_EXPIRY_AT, DB_CREATED_AT, DB_UPDATED_AT,
+      List.of(DB_ID, DB_USER_ID, DB_ITEM_ID, DB_OWNER_ID, DB_STATUS, DB_EXPIRY_AT,
           DB_CONSTRAINTS, DB_ADDITIONAL_INFO);
   public static final List<String> APPROVED_ACCESS_REQUEST_TABLE_COLUMNS =
-      List.of(DB_ID, DB_REQUEST_ID, DB_POLICY_ID, DB_CREATED_AT, DB_UPDATED_AT);
+      List.of(DB_ID, DB_REQUEST_ID, DB_POLICY_ID);
   public static final List<String> RESOURCE_ENTITY_TABLE_COLUMNS =
-      List.of(DB_ID, DB_PROVIDER_ID, DB_RESOURCE_GROUP_ID, DB_ITEM_TYPE, DB_RESOURCE_SERVER_URL, DB_CREATED_AT, DB_UPDATED_AT);
+      List.of(DB_ID, DB_PROVIDER_ID, DB_RESOURCE_GROUP_ID, DB_ITEM_TYPE, DB_RESOURCE_SERVER_URL);
 
 }

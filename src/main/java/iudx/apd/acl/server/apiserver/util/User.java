@@ -8,6 +8,7 @@ import static iudx.apd.acl.server.apiserver.util.Constants.USER_ID;
 import static iudx.apd.acl.server.apiserver.util.Constants.USER_ROLE;
 
 import io.vertx.codegen.annotations.DataObject;
+import io.vertx.codegen.json.annotations.JsonGen;
 import io.vertx.core.json.JsonObject;
 import java.util.Objects;
 
@@ -17,7 +18,8 @@ import java.util.Objects;
  * If the request is made from Provider Delegate, Consumer delegate, it stores information about the
  * Provider, Consumer whom the user is delegate of
  */
-@DataObject(generateConverter = true)
+@DataObject
+@JsonGen
 public class User {
   private final String userId;
   private final Role userRole;

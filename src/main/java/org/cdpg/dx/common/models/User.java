@@ -6,6 +6,7 @@ import static org.cdpg.dx.util.Constants.RS_SERVER_URL;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vertx.codegen.annotations.DataObject;
+import io.vertx.codegen.json.annotations.JsonGen;
 import io.vertx.core.json.JsonObject;
 import java.util.Objects;
 import org.cdpg.dx.acl.policy.model.Role;
@@ -16,7 +17,8 @@ import org.cdpg.dx.acl.policy.model.Role;
  * If the request is made from Provider Delegate, Consumer delegate, it stores information about the
  * Provider, Consumer whom the user is delegate of
  */
-@DataObject(generateConverter = true)
+@DataObject
+@JsonGen
 public class User {
     private final String userId;
     private final Role userRole;

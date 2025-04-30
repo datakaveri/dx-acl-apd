@@ -1,10 +1,12 @@
 package org.cdpg.dx.acl.policy.model;
 
 import io.vertx.codegen.annotations.DataObject;
+import io.vertx.codegen.json.annotations.JsonGen;
 import io.vertx.core.json.JsonObject;
 import java.util.Objects;
 
-@DataObject(generateConverter = true)
+@DataObject
+@JsonGen
 public class Policy {
   private String policyId;
   private Role consumerEmailId;

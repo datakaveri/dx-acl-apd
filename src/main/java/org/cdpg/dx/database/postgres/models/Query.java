@@ -3,7 +3,7 @@ package org.cdpg.dx.database.postgres.models;
 import java.util.List;
 
 public interface Query {
-  String toSQL();
+    String toSQL();
 
-  List<Object> getQueryParams();
+    List<Object> getQueryParams();
 }

@@ -1,10 +1,10 @@
-package org.cdpg.dx.acl.dao.impl;
+package org.cdpg.dx.acl.notification.dao.impl;
 
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
 import java.util.List;
-import org.cdpg.dx.acl.dao.AccessRequestDao;
-import org.cdpg.dx.acl.dao.model.AccessRequestDto;
+import org.cdpg.dx.acl.notification.dao.AccessRequestDao;
+import org.cdpg.dx.acl.notification.dao.model.AccessRequestDto;
 import org.cdpg.dx.database.postgres.models.Condition;
 import org.cdpg.dx.database.postgres.models.InsertQuery;
 import org.cdpg.dx.database.postgres.models.SelectQuery;

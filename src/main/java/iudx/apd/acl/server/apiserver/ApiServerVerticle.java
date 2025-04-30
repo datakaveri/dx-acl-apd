@@ -208,7 +208,6 @@ public class ApiServerVerticle extends AbstractVerticle {
                   .operation(VERIFY_API)
                   .handler(authHandler)
                   .handler(validateKeycloakToken)
-                  .handler(userAccessHandler)
                   .handler(this::verifyRequestHandler)
                   .failureHandler(failureHandler);
 

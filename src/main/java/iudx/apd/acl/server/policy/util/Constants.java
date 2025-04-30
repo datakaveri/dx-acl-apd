@@ -33,7 +33,7 @@ public class Constants {
           + "ON P.user_emailid = U.email_id \n"
           + "INNER JOIN resource_entity AS RE\n"
           + "ON RE._id = P.item_id\n"
-          + "AND P.owner_id = $1::uuid "
+          + "WHERE P.owner_id = $1::uuid "
           + "AND RE.resource_server_url = $2 "
           + " ORDER BY P.updated_at DESC";
 
@@ -43,7 +43,7 @@ public class Constants {
           + "RE.resource_server_url AS \"resourceServerUrl\",\n"
           + "P.owner_id AS \"ownerId\", U.first_name AS \"ownerFirstName\",\n"
           + "U.last_name AS \"ownerLastName\", U.email_id AS \"ownerEmailId\",\n"
-          + "U._id AS \"ownerId\", P.status as \"status\", P.expiry_at AS \"expiryAt\",\n"
+          + "P.status as \"status\", P.expiry_at AS \"expiryAt\",\n"
           + "P.constraints AS \"constraints\" \n"
           + ", P.updated_at AS \"updatedAt\" "
           + ", P.created_at AS \"createdAt\" "
@@ -52,7 +52,7 @@ public class Constants {
           + "ON P.owner_id = U._id \n"
           + "INNER JOIN resource_entity AS RE\n"
           + "ON RE._id = P.item_id\n"
-          + "AND P.user_emailid = $1 "
+          + "WHERE P.user_emailid = $1 "
           + "AND RE.resource_server_url = $2 "
           + " ORDER BY P.updated_at DESC";
   public static final String DELETE_POLICY_QUERY =

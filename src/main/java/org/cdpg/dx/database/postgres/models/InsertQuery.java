@@ -3,6 +3,9 @@ package org.cdpg.dx.database.postgres.models;
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.json.JsonObject;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.cdpg.dx.database.postgres.models.InsertQueryConverter;
+import org.cdpg.dx.database.postgres.models.Query;
 
 @DataObject(generateConverter = true)
 public class InsertQuery implements Query {
@@ -12,10 +15,12 @@ public class InsertQuery implements Query {
 
     // Default constructor (Needed for deserialization)
     public InsertQuery() {}
-    public InsertQuery(InsertQuery other){
-        this.table = other.getTable();
-        this.columns = other.getColumns();
-        this.values = other.getValues();
+
+    // Constructor
+    public InsertQuery(String table, List<String> columns, List<Object> values) {
+        this.table = table;
+        this.columns = columns;
+        this.values = values;
     }
 
     // JSON Constructor
@@ -32,19 +37,40 @@ public class InsertQuery implements Query {
 
     // Getters & Setters (Required for DataObject)
     public String getTable() { return table; }
-    public void setTable(String table) { this.table = table; }
 
     public List<String> getColumns() { return columns; }
-    public void setColumns(List<String> columns) { this.columns = columns; }
 
     public List<Object> getValues() { return values; }
-    public void setValues(List<Object> values) { this.values = values; }
+
+    public InsertQuery setTable(String table) {
+        this.table = table;
+        return this;
+    }
+
+    public InsertQuery setColumns(List<String> columns) {
+        this.columns = columns;
+        return this;
+    }
+
+    public InsertQuery setValues(List<Object> values) {
+        this.values = values;
+        return this;
+    }
 
     @Override
-    public String toSQL() {
-        String placeholders = "?,".repeat(columns.size()).replaceAll(",$", "");
-        return "INSERT INTO " + table + " (" + String.join(", ", columns) + ") VALUES (" + placeholders + ")";
-    }
+public String toSQL() {
+  String placeholders =
+    java.util.stream.IntStream.range(0, columns.size())
+      .mapToObj(i -> "$"+(i+1))
+      .collect(Collectors.joining(", "));
+
+  String finalQuery = "INSERT INTO " + table +
+    " (" + String.join(", ", columns) + ") " +
+    "VALUES (" + placeholders + ") RETURNING *"; // ADD THIS
+  System.out.println("Final Query: " + finalQuery);
+  return finalQuery;
+}
+
 
     @Override
     public List<Object> getQueryParams() {

@@ -49,12 +49,7 @@ public class TestPostgresServiceImpl {
   @Test
   @DisplayName("Test delete method")
   public void testDelete(VertxTestContext vertxTestContext) {
-    Condition condition1 = new Condition();
-    condition1.setColumn(Constants.POLICY_ID);
-
-    String id = String.valueOf(util.getPolicyId());
-    condition1.setValues(List.of(id));
-    condition1.setOperator(Condition.Operator.EQUALS);
+    Condition condition1 = new Condition(Constants.POLICY_ID, Condition.Operator.EQUALS, List.of(util.getPolicyId()));
     DeleteQuery query = new DeleteQuery();
     query.setCondition(condition1);
     query.setLimit(null);

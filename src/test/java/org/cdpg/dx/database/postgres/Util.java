@@ -28,7 +28,7 @@ public class Util {
   public static final String INSERT_INTO_RESOURCE_ENTITY_TABLE =
       "INSERT INTO resource_entity(_id, provider_id, resource_group_id,resource_server_url, created_at, updated_at,item_type) VALUES ($1, $2, $3, $4, $5,$6,$7) RETURNING _id;";
   public static final String INSERT_INTO_POLICY_TABLE =
-      "INSERT INTO policy(_id, user_emailid, item_id, owner_id, status, expiry_at, constraints, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING _id;";
+      "INSERT INTO policy(_id, user_emailid, item_id, owner_id, status, expiry_at, constraints, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;";
   public static final String INSERT_INTO_USER_TABLE =
       "INSERT INTO user_table(_id, email_id, first_name, last_name, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING _id;";
   public static final String INSERT_INTO_REQUEST_TABLE =
@@ -141,8 +141,8 @@ public class Util {
   private void initialize() {
     resourceType = "RESOURCE_GROUP";
     status = "ACTIVE";
-    LocalDateTime expiryTime = LocalDateTime.of(2025, 12, 10, 3, 20, 20, 29);
-    constraints = new JsonObject();
+    LocalDateTime expiryTime = LocalDateTime.of(2080, 12, 10, 3, 20, 20, 29);
+    constraints = new JsonObject().put("access", List.of("file", "async", "somethingElse"));
     resourceId = generateRandomUuid();
     ownerId = generateRandomUuid();
     resourceGroupId = generateRandomUuid();

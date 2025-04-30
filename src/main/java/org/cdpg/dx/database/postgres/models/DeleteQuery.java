@@ -14,13 +14,13 @@ import org.slf4j.LoggerFactory;
 public class DeleteQuery implements Query {
     private static final Logger LOG = LoggerFactory.getLogger(DeleteQuery.class);
     private  String table;
-    private  Condition condition;
-    private  List<OrderBy> orderBy;
+    private org.cdpg.dx.database.postgres.models.Condition condition;
+    private  List<org.cdpg.dx.database.postgres.models.OrderBy> orderBy;
     private  Integer limit; // Optional, so keep as Integer
 
     public DeleteQuery(){}
     // Constructor (OrderBy & Limit are optional)
-    public DeleteQuery(String table, Condition condition, List<OrderBy> orderBy, Integer limit) {
+    public DeleteQuery(String table, org.cdpg.dx.database.postgres.models.Condition condition, List<org.cdpg.dx.database.postgres.models.OrderBy> orderBy, Integer limit) {
         this.table = Objects.requireNonNull(table, "Table name cannot be null");
         this.condition = condition;
         this.orderBy = orderBy != null ? List.copyOf(orderBy) : List.of();
@@ -64,28 +64,35 @@ public class DeleteQuery implements Query {
 
     public String getTable() { return table; }
 
-    public void setTable(String table) {
-        this.table = table;
-    }
 
     public Condition getCondition() {
         return condition;
     }
 
-    public void setCondition(Condition condition) {
-        this.condition = condition;
-    }
 
     public List<OrderBy> getOrderBy() { return orderBy; }
 
-    public void setOrderBy(List<OrderBy> orderBy) {
-        this.orderBy = orderBy;
-    }
 
     public Integer getLimit() { return limit; }
 
-    public void setLimit(Integer limit) {
+    public DeleteQuery setTable(String table) {
+        this.table = table;
+        return this;
+    }
+
+    public DeleteQuery setCondition(Condition condition) {
+        this.condition = condition;
+        return this;
+    }
+
+    public DeleteQuery setOrderBy(List<OrderBy> orderBy) {
+        this.orderBy = orderBy;
+        return this;
+    }
+
+    public DeleteQuery setLimit(Integer limit) {
         this.limit = limit;
+        return this;
     }
 
     @Override
@@ -94,16 +101,13 @@ public class DeleteQuery implements Query {
 
         if (!orderBy.isEmpty()) {
             query.append(" ORDER BY ").append(orderBy.stream()
-                .map(OrderBy::toSQL)
-                .collect(Collectors.joining(", ")));
+                    .map(OrderBy::toSQL)
+                    .collect(Collectors.joining(", ")));
         }
 
 
         if (limit != null) {
             query.append(" LIMIT ").append(limit);
-        }
-        if(condition.getQueryParams()!= null){
-            query = new StringBuilder(query.toString().replace("$1", "$1::UUID"));
         }
 
         return query.toString();

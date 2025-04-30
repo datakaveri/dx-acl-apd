@@ -8,7 +8,7 @@ import java.util.List;
 @JsonGen(publicConverter = false)
 public interface ConditionComponent {
 
-  String toSQL();
+    String toSQL();
 
-  List<Object> getQueryParams();
+    List<Object> getQueryParams();
 }

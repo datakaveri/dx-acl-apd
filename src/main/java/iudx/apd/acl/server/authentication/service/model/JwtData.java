@@ -1,9 +1,11 @@
 package iudx.apd.acl.server.authentication.service.model;
 
 import io.vertx.codegen.annotations.DataObject;
+import io.vertx.codegen.json.annotations.JsonGen;
 import io.vertx.core.json.JsonObject;
 
-@DataObject(generateConverter = true, publicConverter = false)
+@DataObject
+@JsonGen(publicConverter = false)
 public final class JwtData {
 
   private String accessToken;

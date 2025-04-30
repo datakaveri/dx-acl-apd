@@ -18,7 +18,7 @@ public class QueryResult {
     this.rowsAffected = other.isRowsAffected();
   }
 
- public QueryResult(){}
+  public QueryResult(){}
 
   // JSON Constructor
   public QueryResult(JsonObject json) {

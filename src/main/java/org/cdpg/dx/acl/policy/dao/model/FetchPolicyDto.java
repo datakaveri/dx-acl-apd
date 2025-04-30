@@ -1,28 +1,24 @@
-package org.cdpg.dx.acl.policy.model;
+package org.cdpg.dx.acl.policy.dao.model;
 
-import io.vertx.codegen.annotations.DataObject;
-import io.vertx.codegen.json.annotations.JsonGen;
 import io.vertx.core.json.JsonObject;
 import org.cdpg.dx.acl.policy.util.ItemType;
-import org.cdpg.dx.common.models.Response;
 
-@DataObject
-@JsonGen(publicConverter = false)
-public class FetchPolicyModel {
+public class FetchPolicyDto {
   String policyId;
   String itemId;
   ItemType itemType;
   String expiryAt;
-  Constraints constraints;
+  String resourceServerUrl;
+  JsonObject constraints;
   String status;
   String updatedAt;
   String createdAt;
   User consumer;
   User provider;
-  public FetchPolicyModel(){}
 
-  public FetchPolicyModel(FetchPolicyModel other)
-  {
+  public FetchPolicyDto() {}
+
+  public FetchPolicyDto(FetchPolicyDto other) {
     this.policyId = other.getPolicyId();
     this.itemId = other.getItemId();
     this.itemType = other.getItemType();
@@ -33,23 +29,51 @@ public class FetchPolicyModel {
     this.createdAt = other.getCreatedAt();
     this.consumer = other.getConsumer();
     this.provider = other.getProvider();
-
-  }
-  //Deserialization
-  public FetchPolicyModel(JsonObject jsonObject){
-    FetchPolicyModelConverter.fromJson(jsonObject, this);
+    this.resourceServerUrl = other.getResourceServerUrl();
   }
 
-  /**
-   * Converts Data object or Fetch Policy class object to json object [Serialization]
-   *
-   * @return JsonObject
-   */
+  public FetchPolicyDto(JsonObject jsonObject) {
+    setPolicyId(jsonObject.getString("policyId"));
+    setItemId(jsonObject.getString("itemId"));
+    setExpiryAt(jsonObject.getString("expiryAt"));
+    setItemType(ItemType.valueOf(jsonObject.getString("itemType")));
+    setStatus(jsonObject.getString("status"));
+    setCreatedAt(jsonObject.getString("createdAt"));
+    setUpdatedAt(jsonObject.getString("updatedAt"));
+    setResourceServerUrl(jsonObject.getString("resourceServerUrl"));
+    setConsumer(
+        new User()
+            .setEmail(jsonObject.getString("consumerEmailId"))
+            .setId(jsonObject.getString("consumerId"))
+            .setName(
+                new Name()
+                    .setFirstName(jsonObject.getString("consumerFirstName"))
+                    .setLastName(jsonObject.getString("consumerLastName"))));
+    setProvider(
+        new User()
+            .setEmail(jsonObject.getString("ownerEmailId"))
+            .setId(jsonObject.getString("ownerId"))
+            .setName(
+                new Name()
+                    .setFirstName(jsonObject.getString("ownerFirstName"))
+                    .setLastName(jsonObject.getString("ownerLastName"))));
+    setConstraints(new JsonObject(jsonObject.getString("constraints")));
+  }
+
+  public String getResourceServerUrl() {
+    return resourceServerUrl;
+  }
+
+  public FetchPolicyDto setResourceServerUrl(String resourceServerUrl) {
+    this.resourceServerUrl = resourceServerUrl;
+    return this;
+  }
+
   public JsonObject toJson() {
     JsonObject jsonObject = new JsonObject();
-    FetchPolicyModelConverter.toJson(this, jsonObject);
     return jsonObject;
   }
+
   public String getPolicyId() {
     return policyId;
   }
@@ -82,11 +106,11 @@ public class FetchPolicyModel {
     this.expiryAt = expiryAt;
   }
 
-  public Constraints getConstraints() {
+  public JsonObject getConstraints() {
     return constraints;
   }
 
-  public void setConstraints(Constraints constraints) {
+  public void setConstraints(JsonObject constraints) {
     this.constraints = constraints;
   }
 
@@ -130,7 +154,7 @@ public class FetchPolicyModel {
     this.status = status;
   }
 
-  private static class User{
+  public static class User {
     String email;
     Name name;
     String id;
@@ -139,28 +163,31 @@ public class FetchPolicyModel {
       return email;
     }
 
-    public void setEmail(String email) {
+    public User setEmail(String email) {
       this.email = email;
+      return this;
     }
 
     public Name getName() {
       return name;
     }
 
-    public void setName(Name name) {
+    public User setName(Name name) {
       this.name = name;
+      return this;
     }
 
     public String getId() {
       return id;
     }
 
-    public void setId(String id) {
+    public User setId(String id) {
       this.id = id;
+      return this;
     }
   }
 
-  private static class Name{
+  public static class Name {
     String firstName;
     String lastName;
 
@@ -168,16 +195,18 @@ public class FetchPolicyModel {
       return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public Name setFirstName(String firstName) {
       this.firstName = firstName;
+      return this;
     }
 
     public String getLastName() {
       return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public Name setLastName(String lastName) {
       this.lastName = lastName;
+      return this;
     }
   }
 }

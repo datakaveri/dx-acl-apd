@@ -1,10 +1,9 @@
-package org.cdpg.dx.acl.dao.impl;
+package org.cdpg.dx.acl.policy.dao.impl;
 
 import io.vertx.core.Future;
-import io.vertx.core.json.JsonObject;
 import java.util.List;
-import org.cdpg.dx.acl.dao.ResourceEntityDao;
-import org.cdpg.dx.acl.dao.model.ResourceEntityDto;
+import org.cdpg.dx.acl.policy.dao.ResourceEntityDao;
+import org.cdpg.dx.acl.policy.dao.model.ResourceEntityDto;
 import org.cdpg.dx.database.postgres.models.Condition;
 import org.cdpg.dx.database.postgres.models.InsertQuery;
 import org.cdpg.dx.database.postgres.models.SelectQuery;
