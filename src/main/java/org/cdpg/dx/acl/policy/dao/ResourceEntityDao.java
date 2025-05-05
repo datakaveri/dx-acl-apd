@@ -1,7 +1,5 @@
 package org.cdpg.dx.acl.policy.dao;
 
-import io.vertx.codegen.annotations.DataObject;
-import io.vertx.codegen.json.annotations.JsonGen;
 import io.vertx.core.Future;
 import java.util.List;
 import org.cdpg.dx.acl.policy.dao.model.ResourceEntityDto;
@@ -10,7 +8,7 @@ import org.cdpg.dx.acl.policy.dao.model.ResourceEntityDto;
 public interface ResourceEntityDao {
 
   public Future<List<ResourceEntityDto>> getResourceFromDb(
-      String resourceId, String resourceServerUrl, String providerId);
+      String... resourceIds);
 
   public Future<ResourceEntityDto> createResourceInDb(
       String resourceId,
@@ -20,5 +18,5 @@ public interface ResourceEntityDao {
       String resourceServerUrl,
       boolean onConflictDoNothing);
 
-  public Future<List<ResourceEntityDto>> checkResourcesFromDb(List<String> resourceId);
+  public Future<ResourceEntityDto> checkResourcesFromDb(String resourceId, String providerId);
 }

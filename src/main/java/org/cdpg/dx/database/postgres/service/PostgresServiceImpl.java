@@ -3,7 +3,6 @@ package org.cdpg.dx.database.postgres.service;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.Pool;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowSet;
@@ -32,9 +31,10 @@ public class PostgresServiceImpl implements PostgresService {
           JsonObject json = new JsonObject();
             for (int i = 0; i < row.size(); i++) {
                // json.put(row.getColumnName(i), row.getValue(i));
+              LOG.info("Column name: " + row.getColumnName(i) + ", value: " + row.getValue(i));
               String column = row.getColumnName(i);
               value = row.getValue(i);
-              if (value == null || value instanceof String || value instanceof Number || value instanceof Boolean) {
+              if (value == null || value instanceof String || value instanceof Number || value instanceof Boolean || value instanceof JsonObject || value instanceof JsonArray) {
                 System.out.println("value:"+value);
                 json.put(column, value);
               } else {
@@ -68,10 +68,12 @@ public class PostgresServiceImpl implements PostgresService {
   private Future<QueryResult> executeQuery(String sql, List<Object> params) {
     System.out.println("Executing SQL: " + sql);
     System.out.println("With parameters: " + params);
+    Tuple tuple = Tuple.tuple();
 
 
     try {
-      List<Object> coercedParams = new ArrayList<>();
+
+
 
 
       for (Object param : params) {
@@ -88,21 +90,20 @@ public class PostgresServiceImpl implements PostgresService {
               // Parse and
               // qconvert to LocalDateTime
               LocalDateTime time = ZonedDateTime.parse(paramStr).toLocalDateTime();
-              coercedParams.add(time);
+              tuple.addValue(time);
               continue;
             } catch (Exception e) {
               System.out.println("Failed to parse timestamp, keeping as string: " + paramStr);
             }
           }
         }
+          // Default: keep original
+          tuple.addValue(param);
 
-
-        // Default: keep original
-        coercedParams.add(param);
       }
 
 
-      Tuple tuple = Tuple.from(coercedParams);
+
 
 
       return client

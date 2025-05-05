@@ -22,7 +22,7 @@ public class SelectQuery implements Query {
     public SelectQuery() {}
 
     // Constructor including table alias and joins
-    public SelectQuery(String table, String tableAlias, List<String> columns, List<Join> joins, org.cdpg.dx.database.postgres.models.Condition condition, List<String> groupBy,
+    public SelectQuery(String table, String tableAlias, List<String> columns, List<Join> joins, Condition condition, List<String> groupBy,
                        List<OrderBy> orderBy, Integer limit, Integer offset) {
         this.table = table;
         this.tableAlias = tableAlias;
@@ -35,7 +35,7 @@ public class SelectQuery implements Query {
         this.joins = joins != null ? joins : new ArrayList<>();
     }
 
-    public SelectQuery(String table, List<String> columns, org.cdpg.dx.database.postgres.models.Condition condition, List<String> groupBy,
+    public SelectQuery(String table, List<String> columns, Condition condition, List<String> groupBy,
                        List<OrderBy> orderBy, Integer limit, Integer offset) {
         this.table = table;
         this.tableAlias = null;
@@ -189,7 +189,7 @@ public class SelectQuery implements Query {
             }
         }
         System.out.println("hereeee 1 : " + condition);
-
+        
         // Adding condition (WHERE clause)
         if (condition != null) {
             query.append(" WHERE ").append(condition.toSQL(queryParams));

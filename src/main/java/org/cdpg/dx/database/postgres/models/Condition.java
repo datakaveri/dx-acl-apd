@@ -17,36 +17,6 @@ public class Condition {
   private LogicalOperator logicalOperator; // Used for condition groups
   private boolean isGroup; // Flag to distinguish between single condition and group
 
-  public enum Operator {
-    EQUALS("="), NOT_EQUALS("!="), GREATER(">"), LESS("<"), GREATER_EQUALS(">="), LESS_EQUALS("<="),
-    LIKE("LIKE"), IN("IN"), NOT_IN("NOT IN"), BETWEEN("BETWEEN"),
-    IS_NULL("IS NULL"), IS_NOT_NULL("IS NOT NULL");
-
-    private final String symbol;
-
-    Operator(String symbol) {
-      this.symbol = symbol;
-    }
-
-    public String getSymbol() {
-      return symbol;
-    }
-  }
-
-  public enum LogicalOperator {
-    AND("AND"), OR("OR");
-
-    private final String symbol;
-
-    LogicalOperator(String symbol) {
-      this.symbol = symbol;
-    }
-
-    public String getSymbol() {
-      return symbol;
-    }
-  }
-
   // Default constructor
   public Condition() {
   }
@@ -169,7 +139,6 @@ public class Condition {
     }
   }
 
-
   // Get query parameters
   public List<Object> getQueryParams() {
     if (isGroup) {
@@ -186,19 +155,13 @@ public class Condition {
     return column;
   }
 
-
-  public Operator getOperator() {
-    return operator;
-  }
-
-
-  public List<Object> getValues() {
-    return values;
-  }
-
   public Condition setColumn(String column) {
     this.column = column;
     return this;
+  }
+
+  public Operator getOperator() {
+    return operator;
   }
 
   public Condition setOperator(Operator operator) {
@@ -206,23 +169,12 @@ public class Condition {
     return this;
   }
 
+  public List<Object> getValues() {
+    return values;
+  }
+
   public Condition setValues(List<Object> values) {
     this.values = values;
-    return this;
-  }
-
-  public Condition setConditions(List<Condition> conditions) {
-    this.conditions = conditions;
-    return this;
-  }
-
-  public Condition setLogicalOperator(LogicalOperator logicalOperator) {
-    this.logicalOperator = logicalOperator;
-    return this;
-  }
-
-  public Condition setGroup(boolean group) {
-    isGroup = group;
     return this;
   }
 
@@ -230,14 +182,27 @@ public class Condition {
     return conditions;
   }
 
+  public Condition setConditions(List<Condition> conditions) {
+    this.conditions = conditions;
+    return this;
+  }
 
   public LogicalOperator getLogicalOperator() {
     return logicalOperator;
   }
 
+  public Condition setLogicalOperator(LogicalOperator logicalOperator) {
+    this.logicalOperator = logicalOperator;
+    return this;
+  }
 
   public boolean isGroup() {
     return isGroup;
+  }
+
+  public Condition setGroup(boolean group) {
+    isGroup = group;
+    return this;
   }
 
   @Override
@@ -250,5 +215,36 @@ public class Condition {
         ", logicalOperator=" + logicalOperator +
         ", isGroup=" + isGroup +
         '}';
+  }
+
+
+  public enum Operator {
+    EQUALS("="), NOT_EQUALS("!="), GREATER(">"), LESS("<"), GREATER_EQUALS(">="), LESS_EQUALS("<="),
+    LIKE("LIKE"), IN("IN"), NOT_IN("NOT IN"), BETWEEN("BETWEEN"),
+    IS_NULL("IS NULL"), IS_NOT_NULL("IS NOT NULL");
+
+    private final String symbol;
+
+    Operator(String symbol) {
+      this.symbol = symbol;
+    }
+
+    public String getSymbol() {
+      return symbol;
+    }
+  }
+
+  public enum LogicalOperator {
+    AND("AND"), OR("OR");
+
+    private final String symbol;
+
+    LogicalOperator(String symbol) {
+      this.symbol = symbol;
+    }
+
+    public String getSymbol() {
+      return symbol;
+    }
   }
 }
