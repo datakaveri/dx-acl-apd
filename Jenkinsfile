@@ -59,7 +59,6 @@ pipeline {
       }
     }
 
-  }
   post {
     success {
       echo "✅ Trivy scan and Docker build completed successfully."
