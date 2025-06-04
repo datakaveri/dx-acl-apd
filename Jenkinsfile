@@ -59,15 +59,6 @@ pipeline {
       }
     }
 
-  post {
-    success {
-      echo "✅ Trivy scan and Docker build completed successfully."
-    }
-    failure {
-      echo "❌ Trivy scan or Docker build failed!"
-    }
-  }
-
     stage('Unit Tests and CodeCoverage Test'){
       steps{
         script{
