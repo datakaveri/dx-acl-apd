@@ -40,9 +40,9 @@ pipeline {
     stage('Trivy Docker Image Scan') {
       steps {
         script {
-          sh '''
-            trivy image --output trivy-image-report.txt ${devImage.imageName()}
-          '''
+          sh "trivy image --output trivy-dev-image-report.txt ${devImage.imageName()}"
+          sh "trivy image --output trivy-depl-image-report.txt ${deplImage.imageName()}"
+
         }
       }
     }
@@ -53,7 +53,7 @@ pipeline {
           allowMissing: true,
           keepAll: true,
           reportDir: '.',
-          reportFiles: 'trivy-fs-report.txt, trivy-image-report.txt',
+          reportFiles: 'trivy-fs-report.txt, trivy-dev-image-report.txt, trivy-depl-image-report.txt',
           reportName: 'Trivy Reports'
         ])
       }
