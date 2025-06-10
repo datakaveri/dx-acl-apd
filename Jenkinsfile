@@ -41,7 +41,7 @@ pipeline {
       steps {
         script {
           sh '''
-            trivy image --output trivy-image-report.txt $devRegistry
+            trivy image --output trivy-image-report.txt ${devImage.imageName()}
           '''
         }
       }
