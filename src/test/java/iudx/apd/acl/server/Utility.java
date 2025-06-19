@@ -229,9 +229,9 @@ public class Utility {
                                                                         aarHandler -> {
                                                                           if (aarHandler
                                                                               .succeeded()) {
-                                                                            LOG.error(
+                                                                            LOG.info(
                                                                                 "Succeeded in inserting all the queries");
-                                                                            LOG.error(
+                                                                            LOG.info(
                                                                                 "Result from the insertion : {}, {}, {}, {}, {}",
                                                                                 handler.result(),
                                                                                 resourceHandler
@@ -245,42 +245,31 @@ public class Utility {
                                                                             promise.complete(true);
                                                                           } else {
                                                                             hasFailed = true;
-                                                                            LOG.info(
-                                                                                "Failed to insert approved_access_requests");
-                                                                            promise.fail(
-                                                                                "Failed to insert approved_access_requests");
                                                                           }
                                                                         });
                                                               } else {
                                                                 hasFailed = true;
-                                                                LOG.info("Failed to insert policy");
-                                                                promise.fail(
-                                                                    "Failed to insert policy");
                                                               }
                                                             });
                                                   } else {
                                                     hasFailed = true;
-                                                    LOG.info("Failed to insert request");
-                                                    promise.fail("Failed to insert request");
                                                   }
                                                 });
                                       } else {
                                         hasFailed = true;
-                                        LOG.info("Failed to insert resource group");
-                                        promise.fail("Failed to insert resource group");
                                       }
                                     });
 
                           } else {
                             hasFailed = true;
-                            LOG.info("Failed to insert resource");
-                            promise.fail("Failed to insert resource");
                           }
                         });
               } else {
                 hasFailed = true;
-                LOG.info("Failed to insert users");
-                promise.fail("Failed to insert users");
+              }
+              if (hasFailed) {
+                LOG.info("Failed to insert");
+                promise.fail("Failed to insert");
               }
             });
     return promise.future();

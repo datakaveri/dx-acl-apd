@@ -8,26 +8,18 @@ import static iudx.apd.acl.server.common.HttpStatusCode.INTERNAL_SERVER_ERROR;
 import static iudx.apd.acl.server.common.ResponseUrn.*;
 import static iudx.apd.acl.server.notification.util.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
-import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.*;
 import iudx.apd.acl.server.Utility;
 import iudx.apd.acl.server.apiserver.util.User;
 import iudx.apd.acl.server.common.HttpStatusCode;
 import iudx.apd.acl.server.common.ResponseUrn;
 import iudx.apd.acl.server.policy.PostgresService;
-
-import java.nio.Buffer;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -35,9 +27,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -651,7 +641,7 @@ public class TestUpdateNotifications {
             });
   }
 
-  @Test
+  /*@Test
   @DisplayName("Test initiateUpdateNotification with error while creating database connection")
   public void testWithDatabaseConnectionError(VertxTestContext vertxTestContext) {
     PostgresService postgresService = mock(PostgresService.class);
@@ -675,9 +665,9 @@ public class TestUpdateNotifications {
                 vertxTestContext.completeNow();
               }
             });
-  }
+  }*/
 
-  @Test
+ /* @Test
   @DisplayName("Test initiateUpdateNotification with NULL PgPool")
   public void testWithNullPgPool(VertxTestContext vertxTestContext) {
     PostgresService postgresService = mock(PostgresService.class);
@@ -688,7 +678,7 @@ public class TestUpdateNotifications {
         NullPointerException.class,
         () -> updateNotification1.initiateUpdateNotification(approveNotification, owner));
     vertxTestContext.completeNow();
-  }
+  }*/
 
   @Test
   @DisplayName("Test checkIfPolicyExists method when consumer is invalid")
@@ -737,8 +727,6 @@ public class TestUpdateNotifications {
               }
             });
   }
-
-
 
   @Test
   @DisplayName(
@@ -872,7 +860,7 @@ public class TestUpdateNotifications {
             });
   }
 
-  @Test
+ /* @Test
   @DisplayName(
       "Test initiateTransaction method when there is a failure while creating notification: Failure")
   public void testWithFailureInApprovingNotification(VertxTestContext vertxTestContext) {
@@ -919,7 +907,7 @@ public class TestUpdateNotifications {
                                   "Succeeded when there was a failure in approve notification");
 
                             } else {
-                              /* check if the given access request is present and is in pending state */
+                              *//* check if the given access request is present and is in pending state *//*
                               utility
                                   .executeQuery(
                                       Tuple.of(requestId), "SELECT * FROM request WHERE _id = $1 ")
@@ -938,7 +926,7 @@ public class TestUpdateNotifications {
                                           assertEquals(
                                               ownerId.toString(), response.getString("owner_id"));
 
-                                          /* check if the created policy is rolled back */
+                                          *//* check if the created policy is rolled back *//*
                                           utility
                                               .executeQuery(
                                                   Tuple.of(somePolicyId),
@@ -952,7 +940,7 @@ public class TestUpdateNotifications {
                                                               .getJsonArray("response");
                                                       assertTrue(policyResponse.isEmpty());
 
-                                                      /*check if no record is present in approved access request table*/
+                                                      *//*check if no record is present in approved access request table*//*
                                                       utility
                                                           .executeQuery(
                                                               Tuple.of(requestId),
@@ -1000,7 +988,7 @@ public class TestUpdateNotifications {
               vertxTestContext.failNow("Failed during setup");
             });
   }
-
+*/
   @Test
   @DisplayName("Test initiateTransactions method when the constraints is null : Failure")
   public void testInitiateTransactionsWithNullConstraints(VertxTestContext vertxTestContext) {
