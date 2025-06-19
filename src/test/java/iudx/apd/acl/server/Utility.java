@@ -29,6 +29,8 @@ public class Utility {
       "INSERT INTO user_table(_id, email_id, first_name, last_name, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING _id;";
   public static final String INSERT_INTO_REQUEST_TABLE =
       "INSERT INTO request(_id, user_id, item_id, owner_id, status, created_at, updated_at, constraints) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING _id;";
+  public static final String INSERT_INTO_APPROVED_ACCESS_REQUESTS =
+      "INSERT INTO approved_access_requests(policy_id, request_id) VALUES ($1, $2) RETURNING policy_id;";
   private static final Logger LOG = LoggerFactory.getLogger(Utility.class);
   private PgPool pool;
   private String resourceType;
@@ -49,6 +51,7 @@ public class Utility {
   private Tuple ownerTuple;
   private Tuple policyInsertionTuple;
   private Tuple requestInsertionTuple;
+  private Tuple approvedAccessRequestTuple;
   private UUID requestId;
   private String requestStatus;
   private boolean hasFailed;
@@ -185,6 +188,9 @@ public class Utility {
             createdAt,
             updatedAt,
             constraints);
+
+    // Prepare approved access request tuple
+    approvedAccessRequestTuple = Tuple.of(policyId, requestId);
   }
 
   public Future<Boolean> testInsert() {
@@ -214,39 +220,67 @@ public class Utility {
                                                         .onComplete(
                                                             policyHandler -> {
                                                               if (policyHandler.succeeded()) {
-                                                                LOG.info(
-                                                                    "Succeeded in inserting all the queries");
-                                                                LOG.info(
-                                                                    "Result from the insertion : {}, {}, {}, {}",
-                                                                    handler.result(),
-                                                                    resourceHandler.result(),
-                                                                    policyHandler.result(),
-                                                                    requestInsertionHandler
-                                                                        .result());
-                                                                promise.complete(true);
+                                                                // Insert into
+                                                                // approved_access_requests
+                                                                executeQuery(
+                                                                        approvedAccessRequestTuple,
+                                                                        INSERT_INTO_APPROVED_ACCESS_REQUESTS)
+                                                                    .onComplete(
+                                                                        aarHandler -> {
+                                                                          if (aarHandler
+                                                                              .succeeded()) {
+                                                                            LOG.error(
+                                                                                "Succeeded in inserting all the queries");
+                                                                            LOG.error(
+                                                                                "Result from the insertion : {}, {}, {}, {}, {}",
+                                                                                handler.result(),
+                                                                                resourceHandler
+                                                                                    .result(),
+                                                                                policyHandler
+                                                                                    .result(),
+                                                                                requestInsertionHandler
+                                                                                    .result(),
+                                                                                aarHandler
+                                                                                    .result());
+                                                                            promise.complete(true);
+                                                                          } else {
+                                                                            hasFailed = true;
+                                                                            LOG.info(
+                                                                                "Failed to insert approved_access_requests");
+                                                                            promise.fail(
+                                                                                "Failed to insert approved_access_requests");
+                                                                          }
+                                                                        });
                                                               } else {
                                                                 hasFailed = true;
+                                                                LOG.info("Failed to insert policy");
+                                                                promise.fail(
+                                                                    "Failed to insert policy");
                                                               }
                                                             });
                                                   } else {
                                                     hasFailed = true;
+                                                    LOG.info("Failed to insert request");
+                                                    promise.fail("Failed to insert request");
                                                   }
                                                 });
                                       } else {
                                         hasFailed = true;
+                                        LOG.info("Failed to insert resource group");
+                                        promise.fail("Failed to insert resource group");
                                       }
                                     });
 
                           } else {
                             hasFailed = true;
+                            LOG.info("Failed to insert resource");
+                            promise.fail("Failed to insert resource");
                           }
                         });
               } else {
                 hasFailed = true;
-              }
-              if (hasFailed) {
-                LOG.info("Failed to insert");
-                promise.fail("Failed to insert");
+                LOG.info("Failed to insert users");
+                promise.fail("Failed to insert users");
               }
             });
     return promise.future();
