@@ -89,18 +89,22 @@ public class AuthHandler implements Handler<RoutingContext> {
         processAuthFailure(context, "invalid token");
       }
     } else {
-      checkIfAuth(authInfo)
-          .onSuccess(
-              userObj -> {
-                LOGGER.info("User Verified Successfully.");
-                context.put("user", userObj);
-                context.next();
-              })
-          .onFailure(
-              fail -> {
-                LOGGER.error("User Verification Failed. " + fail.getMessage());
-                processAuthFailure(context, fail.getMessage());
-              });
+      if (token.trim().split(" ").length == 2) {
+        token = token.trim().split(" ")[1];
+        authInfo.put(HEADER_TOKEN, token);
+        checkIfAuth(authInfo)
+            .onSuccess(
+                userObj -> {
+                  LOGGER.info("User Verified Successfully.");
+                  context.put("user", userObj);
+                  context.next();
+                })
+            .onFailure(
+                fail -> {
+                  LOGGER.error("User Verification Failed. " + fail.getMessage());
+                  processAuthFailure(context, fail.getMessage());
+                });
+      }
     }
   }
 
