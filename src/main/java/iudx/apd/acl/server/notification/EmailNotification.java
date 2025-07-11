@@ -129,4 +129,93 @@ public class EmailNotification {
 
     return promise.future();
   }
+
+  public Future<Boolean> sendEmailToConsumer(
+      User consumer,
+      String itemId,
+      String resourceServerUrl,
+      String requestStatus,
+      String providerComment,
+      String providerFeedback) {
+    final Promise<Boolean> promise = Promise.promise();
+
+    if (!notifyByEmail) {
+      return Future.succeededFuture(true);
+    }
+
+    List<String> ccList = new ArrayList<>();
+    /* add all the support emailIds to cc*/
+    ccList.addAll(supportEmailIds);
+
+    String consumerEmailId = consumer.getEmailId();
+    String consumerFirstName = consumer.getFirstName();
+    String consumerLastName = consumer.getLastName();
+
+    Future<JsonArray> getEmailIdFuture =
+        getDelegateEmailIds.getEmails(
+            consumer.getUserId(), resourceServerUrl, Role.CONSUMER.getRole());
+    getEmailIdFuture.onComplete(
+        handler -> {
+          if (handler.succeeded()) {
+            JsonArray jsonArray = handler.result();
+            delegateEmailIds = jsonArray.getList();
+            /* add all the delegate email Ids to cc*/
+            ccList.addAll(delegateEmailIds);
+          } else {
+            LOGGER.error("Failure: {}", handler.cause().getMessage());
+            hasFetchDelegateFailed = true;
+            promise.fail("Failed to fetch consumer delegate email Ids");
+          }
+        });
+
+    if (hasFetchDelegateFailed) {
+      return promise.future();
+    }
+    String providerCommentHtml = "";
+    String providerFeedbackHtml = "";
+    if (providerComment != null) {
+      providerCommentHtml = "Provider comment: " + providerComment + "<br/>\n";
+    }
+    if (providerFeedback != null) {
+      providerFeedbackHtml = "Provider feedback: " + providerFeedback + "<br/>\n";
+    }
+    String providerCommentAndFeedback = providerCommentHtml + providerFeedbackHtml;
+
+    String body =
+        CONSUMER_NOTIFICATION_EMAIL_BODY
+            .replace("${CONSUMER_FIRST_NAME}", consumerFirstName)
+            .replace("${CONSUMER_LAST_NAME}", consumerLastName)
+            .replace("${DATASET_ID}", itemId)
+            .replace("${REQUEST_STATUS}", requestStatus)
+            .replace("${PROVIDER_COMMENT_AND_FEEDBACK}", providerCommentAndFeedback)
+            .replace("${SENDER'S_NAME}", senderName);
+
+    MailMessage message = new MailMessage();
+    message.setFrom(senderEmail);
+    message.setTo(consumerEmailId);
+    message.setCc(ccList);
+    message.setHtml(body);
+    message.setSubject("Access request notification");
+    LOGGER.debug("Email message to consumer: {}", message.toJson().encodePrettily());
+    LOGGER.debug("Email message to consumer: {}", body);
+
+    mailClient
+        .sendMail(message)
+        .onComplete(
+            handler -> {
+              if (handler.succeeded()) {
+                LOGGER.debug(
+                    "Email successfully sent to consumer, consumer delegates: {}",
+                    handler.result());
+                promise.complete(true);
+              } else {
+                LOGGER.error(
+                    "Failure in sending email to consumer, consumer delegate {}",
+                    handler.cause().getMessage());
+                promise.fail(handler.cause().getMessage());
+              }
+            });
+
+    return promise.future();
+  }
 }

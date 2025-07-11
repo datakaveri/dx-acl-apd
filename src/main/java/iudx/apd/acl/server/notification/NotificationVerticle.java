@@ -42,7 +42,7 @@ public class NotificationVerticle extends AbstractVerticle {
     createNotification =
         new CreateNotification(postgresService, catalogueClient, emailNotification, authClient);
     deleteNotification = new DeleteNotification(postgresService);
-    updateNotification = new UpdateNotification(postgresService);
+    updateNotification = new UpdateNotification(postgresService, emailNotification);
     getNotification = new GetNotification(postgresService);
     notificationService =
         new NotificationServiceImpl(

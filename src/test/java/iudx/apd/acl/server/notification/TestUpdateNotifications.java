@@ -92,9 +92,9 @@ public class TestUpdateNotifications {
             handler -> {
               if (handler.succeeded()) {
 
-
+                EmailNotification emailNotification = mock(EmailNotification.class);
                 userInfo = new UserInfo();
-                updateNotification = new UpdateNotification(pgService);
+                updateNotification = new UpdateNotification(pgService, emailNotification);
                 rejectNotification = new JsonObject();
                 approveNotification = new JsonObject();
 
@@ -236,8 +236,14 @@ public class TestUpdateNotifications {
             .put("firstName", utility.getOwnerFirstName())
             .put("lastName", utility.getOwnerLastName());
     User owner = new User(jsonObject);
+    EmailNotification emailNotification = mock(EmailNotification.class);
+    updateNotification = new UpdateNotification(utility.setUp(container), emailNotification);
+
+    when(emailNotification.sendEmailToConsumer(any(), anyString(), anyString(), anyString(), anyString(), anyString()))
+        .thenReturn(Future.succeededFuture(true));
+
     updateNotification
-        .initiateUpdateNotification(rejectNotification, owner)
+        .initiateUpdateNotification(rejectNotification.put("providerComment", "Some comment").put("feedbackToConsumer", "some feedback"), owner)
         .onComplete(
             handler -> {
               if (handler.succeeded()) {
@@ -274,12 +280,14 @@ public class TestUpdateNotifications {
     Utility utility = new Utility();
     userInfo = new UserInfo();
     PostgresService postgresService = utility.setUp(container);
+    EmailNotification emailNotification = mock(EmailNotification.class);
+
     utility
         .testInsert()
         .onComplete(
             setUpHandler -> {
               if (setUpHandler.succeeded()) {
-                UpdateNotification updateNotification = new UpdateNotification(postgresService);
+                UpdateNotification updateNotification = new UpdateNotification(postgresService, emailNotification);
                 rejectNotification.put("requestId", utility.getRequestId());
                 rejectNotification.put("status", "rejected");
 
@@ -616,6 +624,8 @@ public class TestUpdateNotifications {
   public void testApproveNotificationWithPolicyAlreadyCreated(VertxTestContext vertxTestContext) {
     Utility utility1 = new Utility();
     PostgresService postgresService = utility1.setUp(container);
+    EmailNotification emailNotification = mock(EmailNotification.class);
+
     utility1
         .testInsert()
         .onComplete(
@@ -637,7 +647,7 @@ public class TestUpdateNotifications {
                         .put("lastName", utility1.getOwnerLastName());
                 User provider = new User(jsonObject);
                 userInfo = new UserInfo();
-                UpdateNotification updateNotification = new UpdateNotification(postgresService);
+                UpdateNotification updateNotification = new UpdateNotification(postgresService, emailNotification);
                 updateNotification
                     .initiateUpdateNotification(approveNotification, provider)
                     .onComplete(
@@ -668,11 +678,13 @@ public class TestUpdateNotifications {
   @DisplayName("Test initiateUpdateNotification with error while creating database connection")
   public void testWithDatabaseConnectionError(VertxTestContext vertxTestContext) {
     PostgresService postgresService = mock(PostgresService.class);
+    EmailNotification emailNotification = mock(EmailNotification.class);
+
     PgPool pgPool = mock(PgPool.class);
     userInfo = new UserInfo();
     when(postgresService.getPool()).thenReturn(pgPool);
     when(pgPool.withConnection(any())).thenReturn(Future.failedFuture("Some error"));
-    UpdateNotification updateNotification1 = new UpdateNotification(postgresService);
+    UpdateNotification updateNotification1 = new UpdateNotification(postgresService, emailNotification);
     updateNotification1
         .initiateUpdateNotification(approveNotification, owner)
         .onComplete(
@@ -697,8 +709,9 @@ public class TestUpdateNotifications {
     PostgresService postgresService = mock(PostgresService.class);
     when(postgresService.getPool()).thenReturn(null);
     userInfo = new UserInfo();
+    EmailNotification emailNotification = mock(EmailNotification.class);
 
-    UpdateNotification updateNotification1 = new UpdateNotification(postgresService);
+    UpdateNotification updateNotification1 = new UpdateNotification(postgresService, emailNotification);
     assertThrows(
         NullPointerException.class,
         () -> updateNotification1.initiateUpdateNotification(approveNotification, owner));
@@ -766,6 +779,7 @@ public class TestUpdateNotifications {
             .put(TITLE, ResponseUrn.DB_ERROR_URN.getUrn())
             .put(DETAIL, "Something went wrong while approving access request");
     Utility util = new Utility();
+    EmailNotification emailNotification = mock(EmailNotification.class);
     container.start();
     userInfo = new UserInfo();
     PostgresService postgresService = util.setUp(container);
@@ -773,7 +787,7 @@ public class TestUpdateNotifications {
         .onComplete(
             vertxTestContext.succeeding(
                 testSetUpSuccessful -> {
-                  UpdateNotification updateNotification = new UpdateNotification(postgresService);
+                  UpdateNotification updateNotification = new UpdateNotification(postgresService, emailNotification);
                   updateNotification
                       .initiateTransactions(
                           new JsonObject()
@@ -895,6 +909,7 @@ public class TestUpdateNotifications {
   public void testWithFailureInApprovingNotification(VertxTestContext vertxTestContext) {
 
     container.start();
+    EmailNotification emailNotification = mock(EmailNotification.class);
     Utility utility = new Utility();
     PostgresService postgresService = utility.setUp(container);
     userInfo = new UserInfo();
@@ -903,7 +918,7 @@ public class TestUpdateNotifications {
         .onComplete(
             vertxTestContext.succeeding(
                 successfulInsertion -> {
-                  UpdateNotification updateNotification = new UpdateNotification(postgresService);
+                  UpdateNotification updateNotification = new UpdateNotification(postgresService, emailNotification);
 
                   UUID itemId = utility.getResourceId();
                   UUID somePolicyId = UUID.randomUUID();

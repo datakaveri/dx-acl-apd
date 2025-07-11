@@ -9,6 +9,7 @@ import static iudx.apd.acl.server.apiserver.util.Constants.USER_ROLE;
 
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.json.JsonObject;
+import iudx.apd.acl.server.validation.exceptions.DxRuntimeException;
 import java.util.Objects;
 
 /**

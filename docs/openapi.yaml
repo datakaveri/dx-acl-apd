@@ -827,9 +827,13 @@ paths:
         If the request is approved
         - The request is modified to the `approved` state
         - A policy is created corresponding to the requested resource with the applicable expiry time and constraints.
+        - An email notification is sent to the consumer regarding the approval of the request.
+           - After the request is approved, the consumer can access the resource as per the constraints defined in the policy.
 
         If the request is rejected
         - The request is modified to the `rejected` state
+        - An email notification is sent to the consumer regarding the rejection of the request.
+          - After the request is rejected, the consumer can create a new request for the same resource or different one.
 
 
       operationId: put-auth-v1-policies-requests

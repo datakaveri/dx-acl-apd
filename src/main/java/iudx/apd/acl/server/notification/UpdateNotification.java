@@ -11,17 +11,15 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.Row;
-import io.vertx.sqlclient.SqlConnection;
 import io.vertx.sqlclient.Tuple;
 import iudx.apd.acl.server.apiserver.util.RequestStatus;
+import iudx.apd.acl.server.apiserver.util.Role;
 import iudx.apd.acl.server.apiserver.util.User;
-import iudx.apd.acl.server.common.HttpStatusCode;
 import iudx.apd.acl.server.common.ResponseUrn;
 import iudx.apd.acl.server.policy.PostgresService;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collector;
@@ -38,11 +36,15 @@ public class UpdateNotification {
   private String itemType;
   private UUID consumerId;
   private String consumerEmailId;
+  private User consumer;
+  private String resourceServerUrl;
   private UUID policyId;
   private LocalDateTime expiryAt;
+  private EmailNotification emailNotification;
 
-  public UpdateNotification(PostgresService postgresService) {
+  public UpdateNotification(PostgresService postgresService, EmailNotification emailNotification) {
     this.postgresService = postgresService;
+    this.emailNotification = emailNotification;
   }
 
   /**
@@ -199,8 +201,7 @@ public class UpdateNotification {
               additionalInfo, providerComment, feedbackToConsumer*/
               String providerComment = notification.getString("providerComment", null);
               String feedbackToConsumer = notification.getString("feedbackToConsumer", null);
-              JsonObject additionalInfo =
-                  notification.getJsonObject("additionalInfo", null);
+              JsonObject additionalInfo = notification.getJsonObject("additionalInfo", null);
 
               Tuple createPolicyTuple =
                   Tuple.of(
@@ -212,8 +213,7 @@ public class UpdateNotification {
                       constraints,
                       additionalInfo,
                       providerComment,
-                      feedbackToConsumer
-                      );
+                      feedbackToConsumer);
 
               var response =
                   sqlConnection
@@ -265,6 +265,18 @@ public class UpdateNotification {
                                     .put(TITLE, ResponseUrn.SUCCESS_URN.getMessage())
                                     .put(DETAIL, "Request updated successfully")
                                     .put(STATUS_CODE, SUCCESS.getValue());
+
+                            /* send email to the consumer, consumer delegate saying this access request has been
+                             * approved, rejected and provide additional feedback, comment from the provider */
+
+                            emailNotification.sendEmailToConsumer(
+                                getConsumer(),
+                                getItemId().toString(),
+                                getResourceServerUrl(),
+                                "granted",
+                                providerComment,
+                                feedbackToConsumer);
+
                             return Future.succeededFuture(successResponse);
                           });
 
@@ -387,7 +399,21 @@ public class UpdateNotification {
               promise.fail(failureMessage.encode());
             } else {
               String consumerEmail = result.getJsonObject(0).getString("email_id");
+              String consumerFirstName = result.getJsonObject(0).getString("first_name");
+              String consumerLastName = result.getJsonObject(0).getString("last_name");
+              JsonObject userInfo = new JsonObject()
+                  .put(USER_ID, getConsumerId().toString())
+                  .put(USER_ROLE, Role.CONSUMER.getRole())
+                  .put(EMAIL_ID, consumerEmail)
+                  .put(FIRST_NAME, consumerFirstName)
+                  .put(LAST_NAME, consumerLastName);
+
+              User consumer = new User(userInfo);
+              /* set consumer info to send email notification */
+              setConsumer(consumer);
               setConsumerEmailId(consumerEmail);
+
+
               Tuple tuple = Tuple.of(getOwnerId(), getItemId(), consumerEmail);
               executeQuery(
                   query,
@@ -453,6 +479,9 @@ public class UpdateNotification {
               String itemId = response.getString("item_id");
               String itemType = response.getString("item_type");
               String resourceServerUrl = response.getString("resource_server_url");
+
+              /*set item's resource server url to help sending email notification to consumer delegates*/
+              setResourceServerUrl(resourceServerUrl);
 
               /* ownership check */
               if (owner.equals(ownerId)) {
@@ -524,7 +553,45 @@ public class UpdateNotification {
                       .put(TITLE, ResponseUrn.SUCCESS_URN.getMessage())
                       .put(DETAIL, "Request updated successfully")
                       .put(STATUS_CODE, SUCCESS.getValue());
-              promise.complete(response);
+
+              /* Get consumer info from user table based on request ID from request table */
+              Tuple consumerTuple = Tuple.of(notification);
+              executeQuery(GET_CONSUMER_INFO_QUERY, consumerTuple, consumerInfoHandler -> {
+                if (consumerInfoHandler.succeeded()) {
+                  JsonArray consumerInfoArray = consumerInfoHandler.result().getJsonArray(RESULT);
+                  if (!consumerInfoArray.isEmpty()) {
+                    JsonObject consumerInfo = consumerInfoArray.getJsonObject(0);
+                    String consumerId = consumerInfo.getString("_id");
+                    String emailId = consumerInfo.getString("email_id");
+                    String firstName = consumerInfo.getString("first_name");
+                    String lastName = consumerInfo.getString("last_name");
+
+                    User consumer = new User(
+                        new JsonObject()
+                            .put(USER_ID, consumerId)
+                            .put(EMAIL_ID, emailId)
+                            .put(FIRST_NAME, firstName)
+                            .put(USER_ROLE, Role.CONSUMER.getRole())
+                            .put(LAST_NAME, lastName));
+
+                    /* send email to the consumer, consumer delegate saying this access request has been rejected */
+                    LOG.info("Request rejected successfully, sending email notification to consumer");
+                    emailNotification.sendEmailToConsumer(
+                        consumer,
+                        getItemId().toString(),
+                        getResourceServerUrl(),
+                        "rejected",
+                        providerComment,
+                        feedbackToConsumer);
+                  } else {
+                    LOG.warn("No consumer info found for notification ID: {}", notification);
+                  }
+                } else {
+                  LOG.error("Failed to fetch consumer info: {}", consumerInfoHandler.cause().getMessage());
+                }
+                promise.complete(response);
+              });
+
             } else {
               LOG.trace("Notification has expired ");
               JsonObject failureResponse = new JsonObject();
@@ -638,5 +705,21 @@ public class UpdateNotification {
 
   public void setExpiryAt(LocalDateTime expiryAt) {
     this.expiryAt = expiryAt;
+  }
+
+  public User getConsumer() {
+    return consumer;
+  }
+
+  public void setConsumer(User consumer) {
+    this.consumer = consumer;
+  }
+
+  public String getResourceServerUrl() {
+    return resourceServerUrl;
+  }
+
+  public void setResourceServerUrl(String resourceServerUrl) {
+    this.resourceServerUrl = resourceServerUrl;
   }
 }

@@ -27,8 +27,13 @@ public class Constants {
           +
           "_id=$1::uuid AND expiry_at IS NULL RETURNING _id";
 
+  public static final String GET_CONSUMER_INFO_QUERY =
+      "SELECT U._id, U.email_id, U.first_name, U.last_name FROM user_table AS U "
+          + "INNER JOIN request AS R ON R._id = $1::uuid "
+          + "AND U._id = R.user_id";
+
   public static final String GET_CONSUMER_EMAIL_QUERY =
-          "SELECT email_id FROM user_table WHERE _id = $1::uuid;";
+          "SELECT email_id, first_name, last_name FROM user_table WHERE _id = $1::uuid;";
   public static final String GET_EXISTING_POLICY_QUERY = "SELECT * FROM policy WHERE owner_id = $1::uuid "
           + "AND status = 'ACTIVE' AND item_id = $2::uuid AND expiry_at > now() AND user_emailid = $3";
 
@@ -81,6 +86,27 @@ public class Constants {
           + "            ${CONSUMER_FIRST_NAME} ${CONSUMER_LAST_NAME}, with email ${CONSUMER_EMAIL_ID} has"
           + " requested access to one of your datasets. Please visit ${PUBLISHER_PANEL_URL} "
           + "to approve/reject this request.\n"
+          + "        </p>\n"
+          + "        <footer>\n"
+          + "            <p>\n"
+          + "                Regards,<br />\n"
+          + "                ${SENDER'S_NAME}\n"
+          + "            </p>\n"
+          + "        </footer>\n"
+          + "    </body>\n"
+          + "</html>\n";
+  public static final String CONSUMER_NOTIFICATION_EMAIL_BODY =
+      "<!DOCTYPE html>\n"
+          + "<html>\n"
+          + "    <head> </head>\n"
+          + "    <body>\n"
+          + "        <p>Hello ${CONSUMER_FIRST_NAME} ${CONSUMER_LAST_NAME},</p>\n"
+          + "        <p>\n"
+          + "            Your access request for the dataset : <b>${DATASET_ID}</b> " +
+          " has been <b>${REQUEST_STATUS}</b>.\n"
+          + "        </p>\n"
+          + "        <p>\n"
+        + "    ${PROVIDER_COMMENT_AND_FEEDBACK}\n"
           + "        </p>\n"
           + "        <footer>\n"
           + "            <p>\n"
