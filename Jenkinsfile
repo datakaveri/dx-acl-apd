@@ -84,6 +84,7 @@ pipeline {
         script{
           sh 'mkdir -p configs'
           sh 'cp /home/ubuntu/configs/apd-config-test.json ./configs/config-test.json'
+          sh 'cp /home/ubuntu/configs/keystore-file.jks ./configs/keystore-file.jks'
           sh 'mvn clean test checkstyle:checkstyle pmd:pmd'
         }
         xunit (
