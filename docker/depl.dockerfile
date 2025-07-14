@@ -1,6 +1,6 @@
 ARG VERSION="0.0.1-SNAPSHOT"
 
-# Using maven base image in builder stage to build Java code...
+# Using maven base image in builder stage to build Java code.
 FROM maven:3-eclipse-temurin-21 as builder
 
 WORKDIR /usr/share/app
