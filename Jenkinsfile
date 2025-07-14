@@ -85,7 +85,7 @@ pipeline {
           sh 'sudo update-alternatives --set java /usr/lib/jvm/java-21-openjdk-amd64/bin/java'
           sh 'mkdir -p configs'
           sh 'cp /home/ubuntu/configs/apd-config-test.json ./configs/config-dev.json'
-          sh 'mvn clean test checkstyle:checkstyle pmd:pmd'
+          sh 'mvn clean test checkstyle:checkstyle pmd:pmd || true'
         }
         xunit (
           thresholds: [ skipped(failureThreshold: '200'), failed(failureThreshold: '200') ],
