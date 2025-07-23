@@ -17,6 +17,23 @@ pipeline {
 
   stages {
 
+    stage('Trigger Validation') {
+      steps {
+        script {
+          def isPRComment = env.ghprbCommentBody != null
+          def changed = isImportantChange()
+          if (isPRComment || changed) {
+            echo "Trigger valid: Running pipeline due to PR comment or file changes."
+          } 
+          else {
+            echo "Skipping pipeline. Reason: No PR comment and no important file changes."
+            currentBuild.result = 'SUCCESS'
+            return
+          }
+        }
+      }
+    }
+
     stage('Trivy Code Scan (Dependencies)') {
       steps {
         script {
@@ -33,30 +50,28 @@ pipeline {
           echo 'Pulled - ' + env.GIT_BRANCH
           devImage = docker.build( devRegistry, "-f ./docker/dev.dockerfile .")
           deplImage = docker.build( deplRegistry, "-f ./docker/depl.dockerfile .")
-          testImage = docker.build( testRegistry, "-f ./docker/test.dockerfile .")
         }
       }
     }
 
-    stage('Trivy Docker Image Scan') {
+    stage('Trivy Docker Image Scan and Report') {
       steps {
         script {
           sh "trivy image --output trivy-dev-image-report.txt ${devImage.imageName()}"
           sh "trivy image --output trivy-depl-image-report.txt ${deplImage.imageName()}"
-
         }
       }
-    }
-    stage('Archive Trivy Reports') {
-      steps {
-        archiveArtifacts artifacts: 'trivy-*.txt', allowEmptyArchive: true
-        publishHTML(target: [
-          allowMissing: true,
-          keepAll: true,
-          reportDir: '.',
-          reportFiles: 'trivy-fs-report.txt, trivy-dev-image-report.txt, trivy-depl-image-report.txt',
-          reportName: 'Trivy Reports'
-        ])
+      post {
+        always {
+          archiveArtifacts artifacts: 'trivy-*.txt', allowEmptyArchive: true
+          publishHTML(target: [
+            allowMissing: true,
+            keepAll: true,
+            reportDir: '.',
+            reportFiles: 'trivy-fs-report.txt, trivy-dev-image-report.txt, trivy-depl-image-report.txt',
+            reportName: 'Trivy Reports'
+          ])
+        }
       }
     }
 
@@ -64,7 +79,9 @@ pipeline {
       steps{
         script{
           sh 'sudo update-alternatives --set java /usr/lib/jvm/java-21-openjdk-amd64/bin/java'
-          sh 'docker compose -f docker-compose.test.yml up test'
+          sh 'mkdir -p configs'
+          sh 'cp /home/ubuntu/configs/apd-config-test.json ./configs/config-dev.json'
+          sh 'mvn clean test -Dmaven.test.failure.ignore=true checkstyle:checkstyle pmd:pmd'
         }
         xunit (
           thresholds: [ skipped(failureThreshold: '200'), failed(failureThreshold: '200') ],
@@ -88,9 +105,6 @@ pipeline {
           )
         }
         failure{
-          script{
-            sh 'docker compose -f docker-compose.test.yml down --remove-orphans'
-          }
           error "Test failure. Stopping pipeline execution!"
         }
         cleanup{
@@ -164,19 +178,10 @@ pipeline {
     
     stage('Continuous Deployment') {
       when {
-        allOf {
-          anyOf {
-            changeset "docker/**"
-            changeset "docs/**"
-            changeset "pom.xml"
-            changeset "src/main/**"
-            triggeredBy cause: 'UserIdCause'
-          }
           expression {
-            return env.GIT_BRANCH == 'origin/1.1.0';
+            return env.GIT_BRANCH == 'origin/main';
           }
         }
-      }
       stages {
         stage('Push Images') {
           steps {
@@ -220,11 +225,21 @@ pipeline {
   post{
     failure{
       script{
-        if (env.GIT_BRANCH == 'origin/1.1.0')
+        if (env.GIT_BRANCH == 'origin/main')
         emailext recipientProviders: [buildUser(), developers()], to: '$AAA_RECIPIENTS, $DEFAULT_RECIPIENTS', subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', body: '''$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS:
 Check console output at $BUILD_URL to view the results.'''
       }
     }
   }
 
+}
+def isImportantChange() {
+  def paths = ['docker/', 'docs/', 'pom.xml', 'src/main/']
+  return currentBuild.changeSets.any { cs ->
+    cs.items.any { item ->
+      item.affectedPaths.any { path ->
+        paths.any { imp -> path.startsWith(imp) || path == imp }
+      }
+    }
+  }
 }
