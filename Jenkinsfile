@@ -81,7 +81,7 @@ pipeline {
               sh 'mvn clean test -Dmaven.test.failure.ignore=true checkstyle:checkstyle pmd:pmd'
             }
             xunit (
-              thresholds: [ skipped(failureThreshold: '200'), failed(failureThreshold: '200') ],
+              thresholds: [ skipped(failureThreshold: '25'), failed(failureThreshold: '5') ],
               tools: [ JUnit(pattern: 'target/surefire-reports/*.xml') ]
             )
             jacoco classPattern: 'target/classes', execPattern: 'target/jacoco.exec', sourcePattern: 'src/main/java', exclusionPattern: '**/*VertxEBProxy.class, **/*VertxProxyHandler.class, **/*Verticle.class, **/*Service.class, iudx/apd/acl/server/deploy/*, **/*Constants.class'
